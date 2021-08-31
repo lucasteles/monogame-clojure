@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>/Users/lucas.teles/dev/pessoal/fsharp-monogame-template/Content/logo.png</SourceFile>
-  <SourceTime>2021-07-05T10:06:57.1419733-03:00</SourceTime>
-  <DestFile>/Users/lucas.teles/dev/pessoal/fsharp-monogame-template/Content/bin/DesktopGL/Content/logo.xnb</DestFile>
-  <DestTime>2021-07-05T10:13:16.8466942-03:00</DestTime>
+  <SourceFile>/Users/lucas.teles/dev/pessoal/clj-clr/Content/logo.png</SourceFile>
+  <SourceTime>2021-08-30T22:03:33.2654865-03:00</SourceTime>
+  <DestFile>/Users/lucas.teles/dev/pessoal/clj-clr/Content/bin/DesktopGL/Content/logo.xnb</DestFile>
+  <DestTime>2021-08-31T16:21:42.2739263-03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

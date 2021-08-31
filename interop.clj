@@ -1,6 +1,8 @@
 (ns interop
   (:import [System.Linq Enumerable]
-           [System Console Convert Object]))
+           [System Console Convert Object]
+           [System.IO Directory Path File]
+           [System.Reflection Assembly]))
 
 (defn int32 [n] (Convert/ToInt32 n))
 
@@ -21,3 +23,13 @@
   (let [prop (-> obj .GetType (.GetMethod method-name) (.MakeGenericMethod generic-type))
         args-array (when args (Enumerable/ToArray (type-args Object) args))]
     (.Invoke prop obj args-array)))
+
+
+(def current "MonoGame.Framework.dll")
+(def executable (Path/Combine (-> (Assembly/GetEntryAssembly)
+                           .Location
+                           Path/GetDirectoryName) current))
+(defn load-monogame []
+    (assembly-load-from
+        (cond (File/Exists current) current
+              (File/Exists executable) executable)))

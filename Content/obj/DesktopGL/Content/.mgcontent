@@ -4,7 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>/Users/lucas.teles/dev/pessoal/fsharp-monogame-template/Content/logo.png</File>
+    <File>/Users/lucas.teles/dev/pessoal/clj-clr/Content/logo.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

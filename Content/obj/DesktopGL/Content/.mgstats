@@ -1,2 +1,2 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"/Users/lucas.teles/dev/pessoal/fsharp-monogame-template/Content/logo.png","/Users/lucas.teles/dev/pessoal/fsharp-monogame-template/Content/bin/DesktopGL/Content/logo.xnb","TextureProcessor","Texture2DContent",3331,262229,0.306265
+"/Users/lucas.teles/dev/pessoal/clj-clr/Content/logo.png","/Users/lucas.teles/dev/pessoal/clj-clr/Content/bin/DesktopGL/Content/logo.xnb","TextureProcessor","Texture2DContent",76854,4194389,0.306795

@@ -1,6 +1,12 @@
 [Under testing]
 
 You will need  `dotnet sdk` 5+
+
+# Running
+`dotnet run`
+
+# Run on clojure
+
 And intall the clojure globall tool' 
 
 ```

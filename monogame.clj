@@ -2,7 +2,8 @@
   (:require [interop :refer :all])
   (:import [System.IO Directory Path]))
 
-(assembly-load-from "MonoGame.dll")
+(load-monogame)
+
 (import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2]
         [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode])
 
@@ -70,7 +71,8 @@
     (swap! props assoc :graphics-manager (new GraphicsDeviceManager game-instance))
     (swap! props assoc :window (get-prop game-instance "Window" ))
     (set! (->> game-instance .Content .RootDirectory )
-          (Path/Combine (Directory/GetCurrentDirectory) "Content/bin/DesktopGL"))
+          (Path/Combine (Directory/GetCurrentDirectory) "Content/bin/DesktopGL")
+          #_ (Path/Combine (Directory/GetCurrentDirectory) "Content"))
     (.Run game-instance)))
 
 (defn clear [graphics-device color]

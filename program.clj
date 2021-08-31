@@ -3,7 +3,7 @@
             [monogame :as g])
   (:gen-class))
 
-(assembly-load-from "MonoGame.dll")
+(load-monogame)
 (import [Microsoft.Xna.Framework Color Vector2]
         [Microsoft.Xna.Framework.Input Keyboard Keys]
         [Microsoft.Xna.Framework.Graphics SpriteEffects])
