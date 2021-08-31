@@ -1,4 +1,4 @@
-(ns program
+(ns game
   (:require [interop :refer :all]
             [monogame :as g])
   (:gen-class))

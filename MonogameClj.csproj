@@ -23,7 +23,7 @@
     <None Update="MonoGame.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="program.clj">
+    <None Update="game.clj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using clojure.lang;
 using Microsoft.Xna.Framework;
 
-RT.load("program");
+RT.load("game");
 
-var load = clojure.clr.api.Clojure.var("program", "-main");
+var load = clojure.clr.api.Clojure.var("game", "-main");
 load.invoke();
