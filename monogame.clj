@@ -5,14 +5,14 @@
 (load-monogame)
 
 (import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2]
-        [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode])
+        [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode]
+        [Microsoft.Xna.Framework.Content ContentManager])
 
 (def graphics-device (memoize (fn [game] (get-prop game "GraphicsDevice"))))
 
 (defn load-texture-2d [game texture-name]
   (let [content (get-prop game "Content")]
-    #_ (.Load content (type-args Texture2D) texture-name)
-    (generic-method content "Load" |Texture2D| texture-name)))
+    (.Load ^ContentManager content (type-args Texture2D) texture-name)))
 
 (defn vect
   ([n] (new Vector2 n))

@@ -19,11 +19,6 @@
                   (filter #(= (.Name %) prop-name)) first)]
     (.GetValue prop obj)))
 
-(defn generic-method [obj method-name generic-type & args]
-  (let [prop (-> obj .GetType (.GetMethod method-name) (.MakeGenericMethod generic-type))
-        args-array (when args (Enumerable/ToArray (type-args Object) args))]
-    (.Invoke prop obj args-array)))
-
 (def current-exe-dir (-> (Assembly/GetEntryAssembly) .Location Path/GetDirectoryName))
 (def current "MonoGame.Framework.dll")
 (def executable (Path/Combine current-exe-dir  current))
