@@ -1,4 +1,4 @@
-(ns jogo
+(ns program
   (:require [interop :refer :all]
             [monogame :as g])
   (:gen-class))
@@ -66,5 +66,6 @@
                           :layer-depth 0})
     (g/end sprite-batch)))
 
-(Console/WriteLine "Ola Delboni")
-(g/run load-content initialize tick draw)
+(defn -main [& args]
+  (Console/WriteLine "Ola Delboni")
+  (g/run load-content initialize tick draw))

@@ -11,4 +11,4 @@ More info here:
 https://github.com/clojure/clojure-clr/wiki/Getting-started
 
 # Running
-`Clojure.Main -i main.clj`
+`Clojure.Main -m program `
