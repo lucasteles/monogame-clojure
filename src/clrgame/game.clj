@@ -68,8 +68,6 @@
                           :layer-depth 0})
     (g/end sprite-batch)))
 
-(Console/WriteLine (Path/Combine current-exe-dir current))
-
 (defn -main [& args]
   (Console/WriteLine "Ola Delboni")
   (g/run load-content initialize tick draw))
