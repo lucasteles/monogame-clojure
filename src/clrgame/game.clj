@@ -1,9 +1,12 @@
-(ns game
-  (:require [interop :refer :all]
-            [monogame :as g])
+(ns clrgame.game
+  (:require [clrgame.interop :refer [current current-exe-dir int32 load-monogame]]
+            [clrgame.monogame :as g])
+  (:import [System Console]
+           [System.IO Path])
   (:gen-class))
 
 (load-monogame)
+
 (import [Microsoft.Xna.Framework Color Vector2]
         [Microsoft.Xna.Framework.Input Keyboard Keys]
         [Microsoft.Xna.Framework.Graphics SpriteEffects])
@@ -64,6 +67,8 @@
                           :effects SpriteEffects/None
                           :layer-depth 0})
     (g/end sprite-batch)))
+
+(Console/WriteLine (Path/Combine current-exe-dir current))
 
 (defn -main [& args]
   (Console/WriteLine "Ola Delboni")

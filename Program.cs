@@ -1,7 +1,9 @@
 ﻿using clojure.lang;
 using Microsoft.Xna.Framework;
 
-RT.load("game");
+RT.load("src/clrgame/interop");
+RT.load("src/clrgame/monogame");
+RT.load("src/clrgame/game");
 
-var load = clojure.clr.api.Clojure.var("game", "-main");
+var load = clojure.clr.api.Clojure.var("clrgame.game", "-main");
 load.invoke();
