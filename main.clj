@@ -11,16 +11,21 @@
   (set! (.IsMouseVisible game) true)
   (set! (.PreferredBackBufferWidth graphics) (int32 1024))
   (set! (.PreferredBackBufferHeight graphics) (int32 768))
-  (.ApplyChanges graphics))
+  (.ApplyChanges graphics)
+  { :rotation 0 })
 
 (defn load-content [game graphics state]
-  { :texture/logo (g/load-texture-2d game "logo") })
+  (assoc state 
+         :texture/logo 
+         (g/load-texture-2d game "logo")))
 
-(defn tick [{:keys [game game-time state]}]
-  state)
+(defn tick [{:keys [game game-time state]
+             {rot :rotation} :state}]
+   (assoc state :rotation (+ rot 0.01)))
 
 (defn draw [{:keys [window sprite-batch delta-time graphics-device]
-             { logo :texture/logo } :state}]
+             { logo :texture/logo
+               rotation :rotation } :state}]
   (let [logo-center (g/vect (-> logo .Bounds .Width (/ 2))
                             (-> logo .Bounds .Height (/ 2)))
         position (g/vect (-> window .ClientBounds .Width (/ 2))
@@ -32,7 +37,7 @@
                           :position position
                           :source-rectangle (.Bounds logo)
                           :color Color/White
-                          :rotation 0
+                          :rotation rotation
                           :origin logo-center
                           :scale 0.5
                           :effects SpriteEffects/None
