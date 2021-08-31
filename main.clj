@@ -1,35 +1,14 @@
-(ns jogo (:gen-class))
+(ns jogo 
+  (:require [interop :refer :all])
+  (:import [System.IO Directory Path])
+  (:gen-class))
 
 (assembly-load-from "MonoGame.dll")
-
-(import [System Console Convert Object])
-(import [System.IO Directory Path])
-(import [System.Linq Enumerable])
 (import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color])
 (import [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D])
 
 ; (assembly-load-from "test.dll")
 ; (import [test Class1])
-
-(defn int32 [n] (Convert/ToInt32 n))
-
-; workaround!
-; for some reason this is not working
-; (.GetProperty (.GetType this) "GraphicsDevice" )
-; (.GraphicsDevice this)
-; both throws:
-;   Syntax error (AmbiguousMatchException) compiling at (/Users/lucas.teles/dev/pessoal/clj-clr/main.clj:53:1).
-;   Ambiguous match found.
-; I will open a question about this in the clojure clr group
-(defn get-prop [obj prop-name]
-  (let [prop (->> obj .GetType .GetProperties
-                  (filter #(= (.Name %) prop-name)) first)]
-    (.GetValue prop obj)))
-
-(defn generic-method [obj method-name generic-type & args]
-  (let [prop (-> obj .GetType (.GetMethod method-name) (.MakeGenericMethod generic-type))
-        args-array (when args (Enumerable/ToArray (type-args Object) args))]
-    (.Invoke prop obj args-array)))
 
 (defn graphics-device [game]
   (get-prop game "GraphicsDevice"))
@@ -48,7 +27,7 @@
   (set! (.PreferredBackBufferHeight graphics) (int32 768))
   (.ApplyChanges graphics))
 
-(defn load-content [game graphis state]
+(defn load-content [game graphics state]
   { :texture/logo (load-texture-2d game "logo") })
 
 (defn tick [{:keys [game game-time state]}]
