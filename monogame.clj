@@ -26,13 +26,13 @@
 
                         ;; below are all overriden/implemented methods
                         (Initialize []
-                          (let [state (initialize-fn this (:graphics-manager @props)) ]
+                          (let [state (initialize-fn this @props)]
                             (when state (swap! props assoc :state state))
                             (proxy-super Initialize)))
 
                         (LoadContent []
                           (let [p @props
-                                state (load-fn this (:graphics-manager p) (:state p))]
+                                state (load-fn this @props)]
                             (swap! props assoc :sprite-batch (new SpriteBatch (graphics-device this)))
                             (when state (swap! props assoc :state state))
                             (proxy-super LoadContent)))
@@ -41,8 +41,8 @@
                           (let [props' @props]
                             (swap! props assoc :state
                                    (update-fn {:game this
-                                               :delta-time (->> game-time .ElapsedGameTime)
                                                :game-time game-time
+                                               :delta-time (->> game-time .ElapsedGameTime)
                                                :state (:state props')
                                                :window (:window props')
                                                :graphics-manager (:graphics-manager props')}))
