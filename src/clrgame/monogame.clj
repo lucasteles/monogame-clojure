@@ -48,14 +48,16 @@
                             (proxy-super LoadContent)))
 
                         (Update [game-time]
-                          (let [props' @props]
-                            (swap! props assoc :state
-                                   (update-fn {:game this
-                                               :game-time game-time
-                                               :delta-time (->> game-time .ElapsedGameTime)
-                                               :state (:state props')
-                                               :window (:window props')
-                                               :graphics-manager (:graphics-manager props')}))
+                          (let [props' @props
+                                state (:state props')
+                                new-state (update-fn {:game this
+                                                      :game-time game-time
+                                                      :delta-time (->> game-time .ElapsedGameTime)
+                                                      :state state
+                                                      :window (:window props')
+                                                      :graphics-manager (:graphics-manager props')})]
+                            (when (not (identical? state new-state))
+                              (swap! props assoc :state new-state))
                             (proxy-super Update game-time)))
 
                         (Draw [game-time]
