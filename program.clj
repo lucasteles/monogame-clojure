@@ -43,8 +43,7 @@
         velocity (read-keys)]
     (assoc state
            :rotation (+ rot 0.01) 
-           :position (g/vect (+ (.X position) (.X velocity))
-                             (+ (.Y position) (.Y velocity))))))
+           :position (g/vect+ position velocity))))
 
 (defn draw [{:keys [sprite-batch delta-time graphics-device]
              { logo :texture/logo
