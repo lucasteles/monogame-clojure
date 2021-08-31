@@ -3,8 +3,8 @@
   (:import [System.IO Directory Path]))
 
 (assembly-load-from "MonoGame.dll")
-(import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2])
-(import [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode])
+(import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2]
+        [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode])
 
 (def graphics-device (memoize (fn [game] (get-prop game "GraphicsDevice"))))
 
