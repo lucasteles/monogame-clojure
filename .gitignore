@@ -31,6 +31,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Cc]ontent/[Oo]bj/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -386,3 +387,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Mac files
+.DS_Store

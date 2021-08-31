@@ -1,7 +1,6 @@
-(ns interop
-  (:import [System.Linq Enumerable]
-           [System Console Convert Object]
-           [System.IO Directory Path File]
+(ns clrgame.interop
+  (:import [System Convert]
+           [System.IO Path File]
            [System.Reflection Assembly]))
 
 (defn int32 [n] (Convert/ToInt32 n))
@@ -20,8 +19,11 @@
     (.GetValue prop obj)))
 
 (def current-exe-dir (-> (Assembly/GetEntryAssembly) .Location Path/GetDirectoryName))
+
 (def current "MonoGame.Framework.dll")
+
 (def executable (Path/Combine current-exe-dir  current))
+
 (defn load-monogame []
     (assembly-load-from
         (cond (File/Exists current) current
