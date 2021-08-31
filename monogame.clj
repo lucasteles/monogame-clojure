@@ -1,6 +1,6 @@
 (ns monogame
   (:require [interop :refer :all])
-  (:import [System.IO Directory Path]))
+  (:import [System.IO Directory Path Directory]))
 
 (load-monogame)
 
@@ -18,13 +18,14 @@
   ([n] (new Vector2 n))
   ([x y] (new Vector2 x y)))
 
-; 
-; op_Multiply
-
 (defn vect+ [v1 v2] (Vector2/op_Addition v1 v2))
 (defn vect- [v1 v2] (Vector2/op_Addition v1 v2))
 (defn vect* [a b] (Vector2/op_Multiply a b))
 (defn vect-div [a b] (Vector2/op_Division a b))
+
+
+(def debug-content-path (Path/Combine (Directory/GetCurrentDirectory) "Content/bin/DesktopGL"))
+(def exe-content-path (Path/Combine current-exe-dir "Content"))
 
 (defn run [load-fn initialize-fn update-fn draw-fn]
   (let [props (atom {:state {}})
@@ -71,8 +72,7 @@
     (swap! props assoc :graphics-manager (new GraphicsDeviceManager game-instance))
     (swap! props assoc :window (get-prop game-instance "Window" ))
     (set! (->> game-instance .Content .RootDirectory )
-          (Path/Combine (Directory/GetCurrentDirectory) "Content/bin/DesktopGL")
-          #_ (Path/Combine (Directory/GetCurrentDirectory) "Content"))
+          (if (Directory/Exists exe-content-path) exe-content-path debug-content-path))
     (.Run game-instance)))
 
 (defn clear [graphics-device color]

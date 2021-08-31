@@ -24,11 +24,9 @@
         args-array (when args (Enumerable/ToArray (type-args Object) args))]
     (.Invoke prop obj args-array)))
 
-
+(def current-exe-dir (-> (Assembly/GetEntryAssembly) .Location Path/GetDirectoryName))
 (def current "MonoGame.Framework.dll")
-(def executable (Path/Combine (-> (Assembly/GetEntryAssembly)
-                           .Location
-                           Path/GetDirectoryName) current))
+(def executable (Path/Combine current-exe-dir  current))
 (defn load-monogame []
     (assembly-load-from
         (cond (File/Exists current) current
