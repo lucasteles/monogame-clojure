@@ -8,7 +8,7 @@
         [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode]
         [Microsoft.Xna.Framework.Content ContentManager])
 
-(def graphics-device (memoize (fn [game] (get-prop game "GraphicsDevice"))))
+(def graphics-device (fn [game] (get-prop game "GraphicsDevice")))
 
 (defn load-texture-2d [game texture-name]
   (let [content (get-prop game "Content")]
