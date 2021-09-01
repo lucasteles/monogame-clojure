@@ -1,26 +1,26 @@
 (ns cljgame.game
   (:require [cljgame.interop :refer [current current-exe-dir int32 load-monogame]]
-            [cljgame.monogame :as g])
+            [cljgame.monogame :as g] 
+            [cljgame.entities.logo :as logo])
   (:import [System Console]
            [System.IO Path])
   (:gen-class))
 
 (load-monogame)
-
 (import [Microsoft.Xna.Framework Color Vector2]
         [Microsoft.Xna.Framework.Input Keyboard Keys]
         [Microsoft.Xna.Framework.Graphics SpriteEffects])
 
-(defn initialize [game { graphics :graphics-manager
-                        window :window }]
+(defn game-configuration! [game graphics] 
   (set! (.IsMouseVisible game) true)
   (set! (.PreferredBackBufferWidth graphics) (int32 1024))
   (set! (.PreferredBackBufferHeight graphics) (int32 768))
-  (.ApplyChanges graphics)
+  (.ApplyChanges graphics))
 
-  {:rotation 0
-   :position  (g/vect (-> window .ClientBounds .Width (/ 2))
-                      (-> window .ClientBounds .Height (/ 2))) })
+(defn initialize [game { graphics :graphics-manager
+                        window :window }]
+  (game-configuration! game graphics)
+  {:logo (logo/init window)})
 
 (defn read-keys []
   (let [keyboard (Keyboard/GetState)
@@ -37,36 +37,17 @@
       :else Vector2/Zero)))
 
 (defn load-content [game {state :state}]
-  (assoc state
-         :texture/logo
-         (g/load-texture-2d game "logo")))
+  (update state
+         :logo (partial logo/load- game)))
 
-(defn tick [{:keys [game game-time state]}]
-  (let [{rot :rotation position :position} state
-        velocity (read-keys)]
-    (assoc state
-           :rotation (+ rot 0.01) 
-           :position (g/vect+ position velocity))))
+(defn tick [{:keys [delta-time state] }]
+  (update state
+          :logo (partial logo/update- delta-time)))
 
 (defn draw [{:keys [sprite-batch delta-time graphics-device]
-             { logo :texture/logo
-              rotation :rotation
-              position :position } :state}]
-  (let [logo-center (g/vect (-> logo .Bounds .Width (/ 2))
-                            (-> logo .Bounds .Height (/ 2)))]
+             { logo :logo } :state}]
     (g/clear graphics-device Color/LightGray)
-
-    (g/begin sprite-batch)
-    (g/draw sprite-batch {:texture logo
-                          :position position
-                          :source-rectangle (.Bounds logo)
-                          :color Color/White
-                          :rotation rotation
-                          :origin logo-center
-                          :scale 0.5
-                          :effects SpriteEffects/None
-                          :layer-depth 0})
-    (g/end sprite-batch)))
+    (logo/draw sprite-batch logo))
 
 (defn -main [& args]
   (Console/WriteLine "Ola Delboni")

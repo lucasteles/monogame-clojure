@@ -52,7 +52,7 @@
                                 state (:state props')
                                 new-state (update-fn {:game this
                                                       :game-time game-time
-                                                      :delta-time (->> game-time .ElapsedGameTime)
+                                                      :delta-time (-> game-time .ElapsedGameTime .TotalSeconds)
                                                       :state state
                                                       :window (:window props')
                                                       :graphics-manager (:graphics-manager props')})]
@@ -63,7 +63,7 @@
                         (Draw [game-time]
                           (let [props' @props]
                             (draw-fn {:game this
-                                      :delta-time (->> game-time .ElapsedGameTime)
+                                      :delta-time (-> game-time .ElapsedGameTime .TotalSeconds)
                                       :game-time game-time
                                       :state (:state props')
                                       :sprite-batch (:sprite-batch props')
