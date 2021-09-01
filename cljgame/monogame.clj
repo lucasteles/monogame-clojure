@@ -120,14 +120,18 @@
   ([x y] (new Vector2 x y)))
 
 (defn vect+ [v1 v2] (Vector2/op_Addition v1 v2))
-(defn vect- [v1 v2] (Vector2/op_Addition v1 v2))
+(defn vect- 
+  ([v] (Vector2/op_UnaryNegation v))
+  ([v1 v2] (Vector2/op_Subtraction v1 v2)))
+
 (defn vect* [a b] (Vector2/op_Multiply a b))
 (defn vect-div [a b] (Vector2/op_Division a b))
 (defn vect-map [v] { :x (.X v) :y (.Y v)})
+
 
 (defn rect [^Vector2 location ^Vector2 size] 
   (new Rectangle (.ToPoint location) (.ToPoint size)) )
 (defn rect-intersects [^Rectangle r1 ^Rectangle r2] (.Intersects r1 r2))
 
-
+(defn tap [v] (println v) v)
 
