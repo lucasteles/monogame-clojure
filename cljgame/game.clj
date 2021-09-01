@@ -37,6 +37,7 @@
       :else Vector2/Zero)))
 
 (defn load-content [game {state :state}]
+  (g/pixel-texture game Color/Black)
   (update state
          :logo (partial logo/load- game)))
 

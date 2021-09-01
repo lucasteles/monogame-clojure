@@ -1,6 +1,7 @@
 (ns cljgame.monogame
   (:require [cljgame.interop :refer [current-exe-dir get-prop load-monogame]])
-  (:import [System.IO Directory Path Directory]))
+  (:import [System.IO Directory Path Directory]
+           [System.Linq Enumerable]))
 
 (load-monogame)
 
@@ -13,6 +14,13 @@
 (defn load-texture-2d [game texture-name]
   (let [content (get-prop game "Content")]
     (.Load ^ContentManager content (type-args Texture2D) texture-name)))
+
+(defn pixel-texture [game color]
+  (let [graphics (graphics-device game)
+        texture (new Texture2D graphics 1 1)
+        color-array (Enumerable/ToArray (type-args Color) (Enumerable/Cast (type-args Color) [color]))]
+    (.SetData ^Texture2D texture (type-args Color) color-array)
+    texture))
 
 (defn vect
   ([n] (new Vector2 n))
