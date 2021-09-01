@@ -11,13 +11,12 @@
                       (-> window .ClientBounds .Height (/ 2)))})
 
 
-
-(defn load- [game state] 
+(defn load- [state game] 
   (assoc state 
          :texture (g/load-texture-2d game "logo")))
 
 
-(defn update- [delta-time {:keys [rotation] :as state}]
+(defn update- [{:keys [rotation] :as state} delta-time]
   (assoc state
          :rotation (+ rotation (* delta-time 0.2))))
 
@@ -29,7 +28,6 @@
        logo-center (g/vect (-> logo .Bounds .Width (/ 2))
                            (-> logo .Bounds .Height (/ 2)))]
 
-    (g/begin sprite-batch)
     (g/draw sprite-batch {:texture logo
                           :position position
                           :source-rectangle (.Bounds logo)
@@ -38,5 +36,4 @@
                           :origin logo-center
                           :scale 0.5
                           :effects SpriteEffects/None
-                          :layer-depth 0})
-    (g/end sprite-batch))) 
+                          :layer-depth 0}))) 

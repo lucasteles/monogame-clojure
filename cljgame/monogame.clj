@@ -5,33 +5,11 @@
 
 (load-monogame)
 
-(import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2]
-        [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode]
+(import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2 Rectangle]
+        [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode SpriteEffects]
         [Microsoft.Xna.Framework.Content ContentManager])
 
 (def graphics-device (fn [game] (get-prop game "GraphicsDevice")))
-
-(defn load-texture-2d [game texture-name]
-  (let [content (get-prop game "Content")]
-    (.Load ^ContentManager content (type-args Texture2D) texture-name)))
-
-(defn pixel-texture [game color]
-  (let [graphics (graphics-device game)
-        texture (new Texture2D graphics 1 1)
-        color-array (Enumerable/ToArray (type-args Color) (Enumerable/Cast (type-args Color) [color]))]
-    (.SetData ^Texture2D texture (type-args Color) color-array)
-    texture))
-
-(defn vect
-  ([n] (new Vector2 n))
-  ([x y] (new Vector2 x y)))
-
-(defn vect+ [v1 v2] (Vector2/op_Addition v1 v2))
-(defn vect- [v1 v2] (Vector2/op_Addition v1 v2))
-(defn vect* [a b] (Vector2/op_Multiply a b))
-(defn vect-div [a b] (Vector2/op_Division a b))
-
-
 (def debug-content-path (Path/Combine (Directory/GetCurrentDirectory) "Content/bin/DesktopGL"))
 (def exe-content-path (Path/Combine current-exe-dir "Content"))
 
@@ -100,7 +78,6 @@
 
 (defn end [sprite-batch] (.End sprite-batch))
 
-
 (defn draw [sprite-batch {:keys [texture position source-rectangle color rotation origin scale effects layer-depth
                                  destination-rectangle]}]
   (cond
@@ -116,6 +93,41 @@
     (and texture destination-rectangle source-rectangle color)
     (.Draw sprite-batch texture destination-rectangle source-rectangle color)
 
+    (and texture destination-rectangle color)
+    (.Draw sprite-batch texture destination-rectangle color)
+
     (and texture position color)
-    (.Draw sprite-batch texture position color)))
+    (.Draw sprite-batch texture position color)
+    
+    :else
+    (throw (new Exception "INVALID DRAW PARAMETERS"))))
+
+
+
+(defn load-texture-2d [game texture-name]
+  (let [content (get-prop game "Content")]
+    (.Load ^ContentManager content (type-args Texture2D) texture-name)))
+
+(defn pixel-texture [game color]
+  (let [graphics (graphics-device game)
+        texture (new Texture2D graphics 1 1)
+        color-array (Enumerable/ToArray (type-args Color) (Enumerable/Cast (type-args Color) [color]))]
+    (.SetData ^Texture2D texture (type-args Color) color-array)
+    texture))
+
+(defn vect
+  ([n] (new Vector2 n))
+  ([x y] (new Vector2 x y)))
+
+(defn vect+ [v1 v2] (Vector2/op_Addition v1 v2))
+(defn vect- [v1 v2] (Vector2/op_Addition v1 v2))
+(defn vect* [a b] (Vector2/op_Multiply a b))
+(defn vect-div [a b] (Vector2/op_Division a b))
+(defn vect-map [v] { :x (.X v) :y (.Y v)})
+
+(defn rect [^Vector2 location ^Vector2 size] 
+  (new Rectangle (.ToPoint location) (.ToPoint size)) )
+(defn rect-intersects [^Rectangle r1 ^Rectangle r2] (.Intersects r1 r2))
+
+
 
