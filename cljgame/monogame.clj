@@ -1,5 +1,5 @@
-(ns clrgame.monogame
-  (:require [clrgame.interop :refer [current-exe-dir get-prop load-monogame]])
+(ns cljgame.monogame
+  (:require [cljgame.interop :refer [current-exe-dir get-prop load-monogame]])
   (:import [System.IO Directory Path Directory]))
 
 (load-monogame)

@@ -1,4 +1,4 @@
-(ns clrgame.interop
+(ns cljgame.interop
   (:import [System Convert]
            [System.IO Path File]
            [System.Reflection Assembly]))

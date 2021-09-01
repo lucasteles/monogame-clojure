@@ -1,6 +1,6 @@
-(ns clrgame.game
-  (:require [clrgame.interop :refer [current current-exe-dir int32 load-monogame]]
-            [clrgame.monogame :as g])
+(ns cljgame.game
+  (:require [cljgame.interop :refer [current current-exe-dir int32 load-monogame]]
+            [cljgame.monogame :as g])
   (:import [System Console]
            [System.IO Path])
   (:gen-class))

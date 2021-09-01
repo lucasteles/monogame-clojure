@@ -6,9 +6,7 @@ using clojure.clr.api;
 
 
 var load = Clojure.var("clojure.core", "load");
-load.invoke("/clrgame/interop");
-load.invoke("/clrgame/monogame");
-load.invoke("/clrgame/game");
-var run = Clojure.var("clrgame.game", "-main");
+load.invoke("/cljgame/game");
+var run = Clojure.var("cljgame.game", "-main");
 run.invoke();
 
