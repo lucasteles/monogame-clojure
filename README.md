@@ -26,7 +26,7 @@ dotnet tool install --global Clojure.Main
 ```
 Run:
 ```bash
-Clojure.Main -m program
+Clojure.Main -m clrgame.game
 ```
 
 More info here:
