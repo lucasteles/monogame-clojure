@@ -1,9 +1,10 @@
 (ns cljgame.entities.ball
-  (:require [cljgame.monogame :as g]))
+  (:require [cljgame.monogame :as g]
+            [cljgame.monogame :as g]))
 
 (import [Microsoft.Xna.Framework Color Vector2])
 
-(def ^:private initial-velocity (g/vect 150))
+(def ^:private initial-velocity (g/vect 200))
 
 (defn center-position [window size]
   (let [bounds (.ClientBounds window)
@@ -23,8 +24,20 @@
 (defn move-ball [{:keys [position velocity] :as state} delta-time]
   (assoc state :position (g/vect+ position (g/vect* velocity delta-time))))
 
+(defn check-velocity [{:keys [size position velocity] :as state} window]
+  (let [y (.Y position)
+        ball-size (.Y size)
+        height (-> window .ClientBounds .Height)
+        new-velocity (if (or (>= (+ y ball-size) height)
+                             (<= y 0))
+                       (g/vect-with-y velocity (- (.Y velocity)))
+                       velocity)]
+    (assoc state :velocity new-velocity)))
+
 (defn update- [state delta-time window]
-  (-> state (move-ball delta-time)))
+  (-> state
+      (check-velocity window)
+      (move-ball delta-time)))
 
 (defn draw [sprite-batch {:keys [texture size position]} ]
   (g/draw sprite-batch {:texture texture
