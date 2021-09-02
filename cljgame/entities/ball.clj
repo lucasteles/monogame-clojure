@@ -1,10 +1,9 @@
 (ns cljgame.entities.ball
-  (:require [cljgame.monogame :as g]
-            [cljgame.monogame :as g]))
+  (:require [cljgame.monogame :as g]))
 
 (import [Microsoft.Xna.Framework Color Vector2])
 
-(def ^:private initial-velocity (g/vect 200))
+(def ^:private initial-velocity (g/vect 250))
 
 (defn center-position [window size]
   (let [bounds (.ClientBounds window)
@@ -24,7 +23,7 @@
 (defn move-ball [{:keys [position velocity] :as state} delta-time]
   (assoc state :position (g/vect+ position (g/vect* velocity delta-time))))
 
-(defn check-velocity [{:keys [size position velocity] :as state} window]
+(defn wall-collision [{:keys [size position velocity] :as state} window]
   (let [y (.Y position)
         ball-size (.Y size)
         height (-> window .ClientBounds .Height)
@@ -34,9 +33,23 @@
                        velocity)]
     (assoc state :velocity new-velocity)))
 
-(defn update- [state delta-time window]
+(defn check-player-colision? [{:keys [position size]} player]
+  (let [rect-ball (g/rect position size)
+        rect-player (g/rect (:position player) (:size player))]
+    (g/rect-intersects rect-ball rect-player)))
+
+
+(defn player-collision [{:keys [velocity position] :as state} 
+                        {:keys [player1 player2]}] 
+  (if (or (check-player-colision? state player1)
+          (check-player-colision? state player2))
+    (assoc state :velocity (g/vect (-> velocity .X -) (.Y velocity)))
+    state))
+
+(defn update- [state delta-time window players]
   (-> state
-      (check-velocity window)
+      (wall-collision window)
+      (player-collision players)
       (move-ball delta-time)))
 
 (defn draw [sprite-batch {:keys [texture size position]} ]

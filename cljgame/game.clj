@@ -40,9 +40,9 @@
   (exit-on-esc game)
   (-> state
       (update :logo logo/update- delta-time)
+      (update :ball ball/update- delta-time window (select-keys state [:player1 :player2]))
       (update :player1 player/update- delta-time window)
-      (update :player2 player/update- delta-time window)
-      (update :ball ball/update- delta-time window)))
+      (update :player2 player/update- delta-time window)))
 
 (defn draw [{:keys [sprite-batch delta-time graphics-device]
              { :keys [player1 player2 logo ball] } :state}]
