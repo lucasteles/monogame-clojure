@@ -5,9 +5,8 @@
         [Microsoft.Xna.Framework.Input Keyboard Keys])
 
 (defn define-player-Position [window index size]
-  (let [bounds (.ClientBounds window)
-        width (.Width bounds)
-        height (.Height bounds)
+  (let [width (g/width window)
+        height (g/height window)
         {:keys [x y]} (g/vect-map size)]
     (case index
       :player1
@@ -43,7 +42,7 @@
 (defn clamp-position [position window size]
   (let [{:keys [x y]} (g/vect-map position)
         min-y 0
-        max-y (-> window .ClientBounds .Height) ]
+        max-y (g/height window) ]
     (cond
       (< y min-y)
       (g/vect-with-y position 0)

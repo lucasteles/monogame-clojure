@@ -5,7 +5,7 @@
 
 (load-monogame)
 
-(import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2 Rectangle]
+(import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2 Rectangle GameWindow]
         [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode SpriteEffects]
         [Microsoft.Xna.Framework.Content ContentManager])
 
@@ -133,6 +133,8 @@
 (defn rect [^Vector2 location ^Vector2 size] 
   (new Rectangle (.ToPoint location) (.ToPoint size)) )
 (defn rect-intersects [^Rectangle r1 ^Rectangle r2] (.Intersects r1 r2))
-
+(defn width [^GameWindow window] (-> window .ClientBounds .Width))
+(defn height [^GameWindow window] (-> window .ClientBounds .Height))
+(defn window-size [^GameWindow window] (let [bounds (.ClientBounds window)] (vect (.Width bounds) (.Height bounds))))
 (defn tap [v] (println v) v)
 

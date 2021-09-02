@@ -6,7 +6,7 @@
 
 (defn check-point [{:keys [position size]} window]
   (let [p1 (>= (+ (.X position) (.X size))
-               (-> window .ClientBounds .Width))
+               (g/width window))
         p2 (<= (.X position) 0)]
     (cond p1 :score/player1
           p2 :score/player2)))
@@ -15,7 +15,6 @@
   (assoc ball 
          :position (ball/center-position window (:size ball))
          :velocity (-> ball :velocity g/vect-)))
-
 
 (defn init []
   {:score/player1 0
@@ -28,3 +27,5 @@
         (update :ball reset-ball window))
     state))
 
+(defn draw [sprite-batch window score]
+  (let [width (g/width window)]))

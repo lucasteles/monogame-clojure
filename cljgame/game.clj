@@ -47,14 +47,15 @@
       (score/update- window)))
 
 
-(defn draw [{:keys [sprite-batch delta-time graphics-device]
-             { :keys [player1 player2 logo ball] } :state}]
+(defn draw [{:keys [sprite-batch graphics-device window]
+             { :keys [player1 player2 logo ball score] } :state}]
     (g/clear graphics-device Color/LightGray)
     (g/begin sprite-batch)
 
     (logo/draw sprite-batch logo)
     (player/draw sprite-batch player1)
     (player/draw sprite-batch player2)
+    (score/draw sprite-batch window score)
     (ball/draw sprite-batch ball)
 
     (g/end sprite-batch))

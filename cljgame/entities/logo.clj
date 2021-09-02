@@ -7,8 +7,8 @@
 
 (defn init [window]
   {:rotation 0
-   :position  (g/vect (-> window .ClientBounds .Width (/ 2))
-                      (-> window .ClientBounds .Height (/ 2)))})
+   :position  (g/vect (-> window g/width (/ 2))
+                      (-> window g/height (/ 2)))})
 
 
 (defn load- [state game] 

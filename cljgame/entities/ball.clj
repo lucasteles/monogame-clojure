@@ -7,9 +7,8 @@
 (def initial-velocity (g/vect initial-speed))
 
 (defn center-position [window size]
-  (let [bounds (.ClientBounds window)
-        width (.Width bounds)
-        height (.Height bounds)
+  (let [width (g/width window)
+        height (g/height window)
         {:keys [x y]} (g/vect-map size)]
     (g/vect (-> width (/ 2) (- (/ x 2)))
             (-> height (/ 2) (- (/ y 2))))))
@@ -27,7 +26,7 @@
 (defn wall-collision [{:keys [size position velocity] :as state} window]
   (let [y (.Y position)
         ball-size (.Y size)
-        height (-> window .ClientBounds .Height)
+        height (g/height window)
         new-velocity (if (or (>= (+ y ball-size) height)
                              (<= y 0))
                        (g/vect-with-y velocity (- (.Y velocity)))
