@@ -124,10 +124,11 @@
   ([v] (Vector2/op_UnaryNegation v))
   ([v1 v2] (Vector2/op_Subtraction v1 v2)))
 
-(defn vect* [a b] (Vector2/op_Multiply a b))
-(defn vect-div [a b] (Vector2/op_Division a b))
-(defn vect-map [v] { :x (.X v) :y (.Y v)})
-
+(defn vect* [^Vector2 a b] (Vector2/op_Multiply a b))
+(defn vect-div [^Vector2 a b] (Vector2/op_Division a b))
+(defn vect-map [^Vector2 v] { :x (.X v) :y (.Y v)})
+(defn vect-with-x [^Vector2 v x] (vect x (.Y v)))
+(defn vect-with-y [^Vector2 v y] (vect (.X v) y))
 
 (defn rect [^Vector2 location ^Vector2 size] 
   (new Rectangle (.ToPoint location) (.ToPoint size)) )

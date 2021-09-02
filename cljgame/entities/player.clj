@@ -17,11 +17,18 @@
       (g/vect (- width  (* x 2))
               (-> height (/ 2) (- (/ y 2)))))))
 
+(defn init [window index state game]
+  (let [size (g/vect 40 200)]
+    (assoc state
+           :size size
+           :texture (g/pixel-texture game Color/SaddleBrown)
+           :index index
+           :position (define-player-Position window index size))))
 
 (defn read-velocity [player-index]
   (let [keyboard (Keyboard/GetState)
         pressed (fn [k] (.IsKeyDown keyboard k))
-        velocity (g/vect 0 700)]
+        velocity (g/vect 0 600)]
     (cond
       (or (and (= player-index :player1) (pressed Keys/W))
           (and (= player-index :player2) (pressed Keys/Up)))
@@ -34,19 +41,25 @@
 
       :else Vector2/Zero)))
 
-(defn move-player [position player-index delta-time]
-  (g/vect+ position (-> player-index read-velocity (g/vect* delta-time))))
+(defn clamp-position [position window size]
+  (let [{:keys [x y]} (g/vect-map position)
+        min-y 0
+        max-y (-> window .ClientBounds .Height) ]
+    (cond
+      (< y min-y)
+      (g/vect-with-y position 0)
 
-(defn init [window index state game]
-  (let [size (g/vect 40 200)]
-    (assoc state
-           :size size
-           :texture (g/pixel-texture game Color/Black)
-           :index index
-           :position (define-player-Position window index size))))
+      (> (+ y (.Y size)) max-y)
+      (g/vect-with-y position (- max-y (.Y size)))
 
-(defn update- [{ index :index :as state} delta-time]
-  (update state :position move-player index delta-time))
+      :else position)))
+
+(defn move-player [position player-index delta-time window size]
+  (let [velocity (-> player-index read-velocity (g/vect* delta-time))]
+    (-> position (g/vect+ velocity) (clamp-position window size))))
+
+(defn update- [{ index :index size :size :as state} delta-time window]
+  (update state :position move-player index delta-time window size))
 
 (defn draw [sprite-batch {:keys [texture size position]} ]
   (g/draw sprite-batch {:texture texture

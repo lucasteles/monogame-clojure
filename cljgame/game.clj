@@ -35,12 +35,12 @@
    (-> state
        (update :logo logo/load- game)))
 
-(defn update- [{:keys [delta-time state game] }]
+(defn update- [{:keys [delta-time state game window] }]
   (exit-on-esc game)
   (-> state
       (update :logo logo/update- delta-time)
-      (update :player1 player/update- delta-time)
-      (update :player2 player/update- delta-time)
+      (update :player1 player/update- delta-time window)
+      (update :player2 player/update- delta-time window)
       
       ))
 
