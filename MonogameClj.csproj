@@ -20,7 +20,7 @@
     <None Update="src\clrgame\monogame.clj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="MonoGame.dll">
+    <None Update="MonoGame.Framework.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="src\clrgame\game.clj">

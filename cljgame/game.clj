@@ -1,17 +1,12 @@
 (ns cljgame.game
   (:require [cljgame.interop :refer [current current-exe-dir int32 load-monogame]]
             [cljgame.monogame :as g] 
-            [cljgame.entities.logo :as logo]
-            [cljgame.entities.ball :as ball]
-            [cljgame.entities.player :as player]
-            [cljgame.entities.ball :as ball]
-            [cljgame.entities.score :as score])
-  (:import [System Console])
+            [cljgame.entities.floor :as floor]
+            [cljgame.entities.background :as background])
+  (:import [System Console]
+           [Microsoft.Xna.Framework Color Vector2]
+           [Microsoft.Xna.Framework.Input Keyboard Keys])
   (:gen-class))
-
-(load-monogame)
-(import [Microsoft.Xna.Framework Color Vector2]
-        [Microsoft.Xna.Framework.Input Keyboard Keys])
 
 (defn game-configuration! [game graphics] 
   (set! (.IsMouseVisible game) true)
@@ -27,39 +22,23 @@
                          window :window }]
   (game-configuration! game graphics)
 
-  {:logo (logo/init window)
-   :player1 (player/init window :player1 game)
-   :player2 (player/init window :player2 game)
-   :ball (ball/init window game)
-   :score (score/init game) })
-
-(defn load-content [game {state :state}]
-   (-> state
-       (update :logo logo/load- game)))
+  {:floor (floor/init game window) 
+   :background (background/init game window) }) 
 
 (defn update- [{:keys [delta-time state game window] }]
   (exit-on-esc game)
   (-> state
-      (update :logo logo/update- delta-time)
-      (update :ball ball/update- delta-time window (select-keys state [:player1 :player2]))
-      (update :player1 player/update- delta-time window)
-      (update :player2 player/update- delta-time window)
-      (score/update- window)))
-
+      (update :background background/update- delta-time)
+      (update :floor floor/update- delta-time)))
 
 (defn draw [{:keys [sprite-batch graphics-device window]
-             { :keys [player1 player2 logo ball score] } :state}]
+             { :keys [floor background] } :state}]
     (g/clear graphics-device Color/LightGray)
     (g/begin sprite-batch)
-
-    (logo/draw sprite-batch logo)
-    (player/draw sprite-batch player1)
-    (player/draw sprite-batch player2)
-    (score/draw sprite-batch window score)
-    (ball/draw sprite-batch ball)
-
+    (background/draw sprite-batch background)
+    (floor/draw sprite-batch floor)
     (g/end sprite-batch))
 
 (defn -main [& args]
   (Console/WriteLine "Ola Delboni")
-  (g/run load-content initialize update- draw))
+  (g/run (constantly nil) initialize update- draw))

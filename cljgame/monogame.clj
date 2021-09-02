@@ -84,7 +84,7 @@
     (and texture position source-rectangle color rotation origin scale effects layer-depth)
     (.Draw sprite-batch texture position source-rectangle color rotation origin scale effects layer-depth)
 
-    (and  texture destination-rectangle source-rectangle color rotation origin effects layer-depth)
+    (and texture destination-rectangle source-rectangle color rotation origin effects layer-depth)
     (.Draw sprite-batch texture destination-rectangle source-rectangle color rotation origin effects layer-depth)
 
     (and texture position source-rectangle color)
