@@ -3,7 +3,8 @@
 
 (import [Microsoft.Xna.Framework Color Vector2])
 
-(def ^:private initial-velocity (g/vect 250))
+(def initial-speed 250)
+(def initial-velocity (g/vect initial-speed))
 
 (defn center-position [window size]
   (let [bounds (.ClientBounds window)

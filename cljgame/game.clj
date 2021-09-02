@@ -4,9 +4,9 @@
             [cljgame.entities.logo :as logo]
             [cljgame.entities.ball :as ball]
             [cljgame.entities.player :as player]
-            [cljgame.entities.ball :as ball])
-  (:import [System Console]
-           [System.IO Path])
+            [cljgame.entities.ball :as ball]
+            [cljgame.entities.score :as score])
+  (:import [System Console])
   (:gen-class))
 
 (load-monogame)
@@ -30,7 +30,8 @@
   {:logo (logo/init window)
    :player1 (player/init window :player1 game)
    :player2 (player/init window :player2 game)
-   :ball (ball/init window game)})
+   :ball (ball/init window game)
+   :score (score/init) })
 
 (defn load-content [game {state :state}]
    (-> state
@@ -42,7 +43,9 @@
       (update :logo logo/update- delta-time)
       (update :ball ball/update- delta-time window (select-keys state [:player1 :player2]))
       (update :player1 player/update- delta-time window)
-      (update :player2 player/update- delta-time window)))
+      (update :player2 player/update- delta-time window)
+      (score/update- window)))
+
 
 (defn draw [{:keys [sprite-batch delta-time graphics-device]
              { :keys [player1 player2 logo ball] } :state}]
