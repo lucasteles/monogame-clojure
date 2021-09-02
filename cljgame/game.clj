@@ -2,8 +2,9 @@
   (:require [cljgame.interop :refer [current current-exe-dir int32 load-monogame]]
             [cljgame.monogame :as g] 
             [cljgame.entities.logo :as logo]
+            [cljgame.entities.ball :as ball]
             [cljgame.entities.player :as player]
-            [cljgame.entities.player :as player])
+            [cljgame.entities.ball :as ball])
   (:import [System Console]
            [System.IO Path])
   (:gen-class))
@@ -23,13 +24,13 @@
     (.Exit game)))
 
 (defn initialize [game { graphics :graphics-manager
-                         window :window
-                         state :state }]
+                         window :window }]
   (game-configuration! game graphics)
 
   {:logo (logo/init window)
-   :player1 (player/init window :player1 state game)
-   :player2 (player/init window :player2 state game)})
+   :player1 (player/init window :player1 game)
+   :player2 (player/init window :player2 game)
+   :ball (ball/init window game)})
 
 (defn load-content [game {state :state}]
    (-> state
@@ -41,17 +42,17 @@
       (update :logo logo/update- delta-time)
       (update :player1 player/update- delta-time window)
       (update :player2 player/update- delta-time window)
-      
-      ))
+      (update :ball ball/update- delta-time window)))
 
 (defn draw [{:keys [sprite-batch delta-time graphics-device]
-             { :keys [player1 player2 logo] } :state}]
+             { :keys [player1 player2 logo ball] } :state}]
     (g/clear graphics-device Color/LightGray)
     (g/begin sprite-batch)
 
     (logo/draw sprite-batch logo)
     (player/draw sprite-batch player1)
     (player/draw sprite-batch player2)
+    (ball/draw sprite-batch ball)
 
     (g/end sprite-batch))
 

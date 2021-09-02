@@ -17,13 +17,12 @@
       (g/vect (- width  (* x 2))
               (-> height (/ 2) (- (/ y 2)))))))
 
-(defn init [window index state game]
+(defn init [window index game]
   (let [size (g/vect 40 200)]
-    (assoc state
-           :size size
-           :texture (g/pixel-texture game Color/SaddleBrown)
-           :index index
-           :position (define-player-Position window index size))))
+    {:size size
+     :texture (g/pixel-texture game Color/SaddleBrown)
+     :index index
+     :position (define-player-Position window index size) }))
 
 (defn read-velocity [player-index]
   (let [keyboard (Keyboard/GetState)
