@@ -1,6 +1,10 @@
 # clojure-clr-monogame-test
 [Under testing]
 
+## Pong Clone
+
+![](pong-480.gif)
+
 ## Requirements
 
 - `dotnet sdk 3.1`
