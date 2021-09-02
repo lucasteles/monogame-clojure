@@ -6,7 +6,7 @@
 (load-monogame)
 
 (import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2 Rectangle GameWindow]
-        [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode SpriteEffects]
+        [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode SpriteEffects SpriteFont]
         [Microsoft.Xna.Framework.Content ContentManager])
 
 (def graphics-device (fn [game] (get-prop game "GraphicsDevice")))
@@ -102,11 +102,26 @@
     :else
     (throw (new Exception "INVALID DRAW PARAMETERS"))))
 
+(defn draw-text [sprite-batch {:keys [sprite-font text position color
+                                      rotation origin scale effects layer-depth]}]
+  (cond 
+    (and sprite-font text position color)   
+    (.DrawString sprite-batch sprite-font (str text) position color)
+
+    (and sprite-font text position color rotation origin scale effects layer-depth)
+    (.DrawString sprite-batch sprite-font (str text) position color rotation origin scale effects layer-depth)
+
+    :else
+    (throw (new Exception "INVALID DRAW TEXT PARAMETERS"))))
 
 
 (defn load-texture-2d [game texture-name]
   (let [content (get-prop game "Content")]
     (.Load ^ContentManager content (type-args Texture2D) texture-name)))
+
+(defn load-sprite-font [game font-name] 
+  (let [content (get-prop game "Content")]
+    (.Load ^ContentManager content (type-args SpriteFont) font-name)))
 
 (defn pixel-texture [game color]
   (let [graphics (graphics-device game)

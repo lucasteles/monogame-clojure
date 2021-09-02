@@ -31,7 +31,7 @@
    :player1 (player/init window :player1 game)
    :player2 (player/init window :player2 game)
    :ball (ball/init window game)
-   :score (score/init) })
+   :score (score/init game) })
 
 (defn load-content [game {state :state}]
    (-> state
