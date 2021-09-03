@@ -78,27 +78,21 @@
 #begin scorefont.TTF
 /copy:scorefont.TTF
 
-#begin sfx_hit.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin sfxhit.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:sfx_hit.ogg
+/build:sfxhit.mp3
 
-#begin sfx_point.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin sfxpoint.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:sfx_point.ogg
+/build:sfxpoint.mp3
 
-#begin sfx_swooshing.ogg
-/importer:OggImporter
-/processor:SongProcessor
+#begin sfxwing.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:sfx_swooshing.ogg
-
-#begin sfx_wing.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:sfx_wing.ogg
+/build:sfxwing.mp3
 

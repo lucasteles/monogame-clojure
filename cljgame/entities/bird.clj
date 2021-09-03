@@ -16,6 +16,7 @@
      :sprite-index :normal
      :animation-frame-time 0
      :rotation 0
+     :sound/wing (-> game (g/load-sound-effect "sfxwing") (g/sound-effect-instance))
      :sprite-source {:normal (g/rect 0 0 sprite-width sprite-height)
                      :flip (g/rect sprite-width 0 sprite-width sprite-height)}
      :body (physics/create-body world :dynamic
@@ -25,7 +26,8 @@
                                 :bird)}))
 
 
-(defn handle-jump [{:keys [offset width position body holding] :as state} delta-time]
+(defn handle-jump [{:keys [offset width position body holding]
+                    sfx-wing :sound/wing :as state} delta-time]
   (let [keyboard (g/keyboard-state)
         pressed (g/is-key-dowm keyboard :space)
         released (g/is-key-up keyboard :space)]
@@ -33,6 +35,7 @@
       (and (not holding) pressed)
       (do (physics/set-linear-velocity! body g/vect-0)
           (physics/apply-impulse! body jump-force)
+          (g/play sfx-wing)
           (assoc state 
                  :holding true
                  :sprite-index :flip

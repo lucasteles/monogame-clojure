@@ -22,7 +22,7 @@
 
 (defn create-pipe [position width texture-height floor-height window world]
   (let [center (/ texture-height 2)
-        random-top (-> (g/random-int 100 350))
+        random-top (-> (g/random-int 80 310))
         spawn-x (-> window g/width (+ texture-height) inc)
         window-height (g/height window) 
         spawn-y-up (- random-top center)

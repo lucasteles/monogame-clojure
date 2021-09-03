@@ -8,6 +8,8 @@
 (import [Microsoft.Xna.Framework Game GraphicsDeviceManager Color Vector2 Rectangle GameWindow]
         [Microsoft.Xna.Framework.Graphics SpriteBatch Texture2D SpriteSortMode SpriteEffects SpriteFont]
         [Microsoft.Xna.Framework.Content ContentManager]
+        [Microsoft.Xna.Framework.Media Song]
+        [Microsoft.Xna.Framework.Audio SoundEffect]
         [Microsoft.Xna.Framework.Input Keyboard Keys])
 
 (def graphics-device (fn [game] (get-prop game "GraphicsDevice")))
@@ -84,6 +86,18 @@
 (defn load-sprite-font [game font-name]
   (let [content (get-prop game "Content")]
     (.Load ^ContentManager content (type-args SpriteFont) font-name)))
+
+(defn load-sound-effect [game sound]
+  (let [content (get-prop game "Content")]
+    (.Load ^ContentManager content (type-args SoundEffect) sound)))
+
+(defn sound-effect-instance [^SoundEffect sound-effect]
+  (.CreateInstance sound-effect))
+(defn play [sound] (.Play sound))
+
+(defn load-song [game song]
+  (let [content (get-prop game "Content")]
+    (.Load ^ContentManager content (type-args Song) song)))
 
 (defn vect
   ([n] (new Vector2 n))
