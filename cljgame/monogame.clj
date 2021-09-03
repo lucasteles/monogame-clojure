@@ -178,6 +178,11 @@
    :steel-blue Color/SteelBlue :tan Color/Tan :teal Color/Teal :thistle Color/Thistle :tomato Color/Tomato :transparent Color/Transparent :transparent-black Color/TransparentBlack :turquoise Color/Turquoise
    :violet Color/Violet :wheat Color/Wheat :white Color/White :white-smoke Color/WhiteSmoke :yellow Color/Yellow :yellow-green Color/YellowGreen })
 
+(def sprite-effects-map {
+   :none SpriteEffects/None
+   :flip-horizontally SpriteEffects/FlipHorizontally 
+   :flip-vertically SpriteEffects/FlipVertically })
+
 (defn- find-color [color]  
   (when color
     (if (keyword? color)
@@ -200,13 +205,14 @@
 
 (defn draw [sprite-batch {:keys [texture position source-rectangle color rotation origin scale effects layer-depth
                                  destination-rectangle]}]
-  (let [color-internal (find-color color)]
+  (let [color-internal (find-color color)
+        effects-internal (if (keyword? effects) (effects sprite-effects-map) effects)]
   (cond
-    (and texture position source-rectangle color-internal rotation origin scale effects layer-depth)
-    (.Draw sprite-batch texture position source-rectangle color-internal rotation origin scale effects layer-depth)
+    (and texture position source-rectangle color-internal rotation origin scale effects-internal layer-depth)
+    (.Draw sprite-batch texture position source-rectangle color-internal rotation origin scale effects-internal layer-depth)
 
-    (and texture destination-rectangle source-rectangle color-internal rotation origin effects layer-depth)
-    (.Draw sprite-batch texture destination-rectangle source-rectangle color-internal rotation origin effects layer-depth)
+    (and texture destination-rectangle source-rectangle color-internal rotation origin effects-internal layer-depth)
+    (.Draw sprite-batch texture destination-rectangle source-rectangle color-internal rotation origin effects-internal layer-depth)
 
     (and texture position source-rectangle color-internal)
     (.Draw sprite-batch texture position source-rectangle color-internal)
@@ -225,13 +231,15 @@
 
 (defn draw-text [sprite-batch {:keys [sprite-font text position color
                                       rotation origin scale effects layer-depth]}]
+  (let [color-internal (find-color color)
+        effects-internal (if (keyword? effects) (effects sprite-effects-map) effects)]
   (cond
-    (and sprite-font text position color)
-    (.DrawString sprite-batch sprite-font (str text) position color)
+    (and sprite-font text position color-internal)
+    (.DrawString sprite-batch sprite-font (str text) position color-internal)
 
-    (and sprite-font text position color rotation origin scale effects layer-depth)
-    (.DrawString sprite-batch sprite-font (str text) position color rotation origin scale effects layer-depth)
+    (and sprite-font text position color-internal rotation origin scale effects-internal layer-depth)
+    (.DrawString sprite-batch sprite-font (str text) position color-internal rotation origin scale effects-internal layer-depth)
 
     :else
-    (throw (new Exception "INVALID DRAW TEXT PARAMETERS"))))
+    (throw (new Exception "INVALID DRAW TEXT PARAMETERS")))))
 
