@@ -48,7 +48,7 @@
       (g/draw sprite-batch {:texture texture
                             :position position
                             :source-rectangle (.Bounds texture)
-                            :color Color/White
+                            :color :white
                             :rotation 0
                             :origin Vector2/Zero
                             :scale scale

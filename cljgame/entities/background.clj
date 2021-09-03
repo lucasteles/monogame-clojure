@@ -38,7 +38,7 @@
                                           (g/vect+ (g/vect* step i)) 
                                           (g/vect+ (g/vect offset 0)))
                             :source-rectangle (.Bounds logo)
-                            :color Color/White
+                            :color :white
                             :rotation 0
                             :origin Vector2/Zero
                             :scale scale

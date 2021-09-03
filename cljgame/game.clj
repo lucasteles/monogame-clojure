@@ -6,9 +6,7 @@
             [cljgame.entities.pipes :as pipes]
             [cljgame.entities.bird :as bird]
             [cljgame.entities.background :as background])
-  (:import [System Console]
-           [Microsoft.Xna.Framework Color Vector2]
-           [Microsoft.Xna.Framework.Input Keyboard Keys])
+  (:import [System Console])
   (:gen-class))
 
 (defn game-configuration! [game graphics]
@@ -18,13 +16,12 @@
   (.ApplyChanges graphics))
 
 (defn exit-on-esc [game]
-  (when (-> (Keyboard/GetState) (.IsKeyDown Keys/Escape))
-    (.Exit game)))
+  (when (-> (g/keyboard-state) (g/is-key-dowm :escape))
+    (g/exit game)))
 
 (defn initialize [game { graphics :graphics-manager window :window }]
   (let [world (physics/create-world)]
     (game-configuration! game graphics)
-
     {:world world
      :floor (floor/init game window world)
      :background (background/init game window)
@@ -42,7 +39,7 @@
 
 (defn draw [{:keys [sprite-batch graphics-device window]
             {:keys [floor background pipes bird] } :state}]
-  (g/clear graphics-device Color/LightGray)
+  (g/clear graphics-device :light-gray)
   (g/begin sprite-batch)
 
   (background/draw sprite-batch background)

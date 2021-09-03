@@ -9,12 +9,18 @@
 
 (defn init [game window world]
   (let [texture (g/load-texture-2d game "birdspritesheet")
-        height (-> texture .Height (* scale))
-        width (-> texture .Width (* scale))
-        position (g/vect 100 100)]
+        position (g/vect 100 100)
+        sprite-width (-> texture .Width (/ 2))
+        sprite-height (.Height texture)]
     {:texture texture
+     :sprite-index 0
+     :animation-frame-time 0
+     :sprite-source [(g/rect 0 0 sprite-width sprite-height)
+                     (g/rect sprite-width 0 (.Width texture) sprite-height)]
      :body (physics/create-body world :dynamic 
-                                (g/rect position width height)
+                                (g/rect position 
+                                        (* sprite-width scale) 
+                                        (* sprite-height scale))
                                 :bird)}))
 
 
@@ -23,15 +29,16 @@
 
 (defn draw [sprite-batch state ]
   (let [{texture :texture
+         sprite-index :sprite-index
+         sprite-source :sprite-source
          body :body} state
         position (physics/position body)
         rotation (physics/rotation body)
-        source-rect (.Bounds texture)]
-
+        source-rect (get sprite-source sprite-index )]
     (g/draw sprite-batch {:texture texture
                           :position position
                           :source-rectangle source-rect
-                          :color Color/White
+                          :color :white
                           :rotation rotation
                           :origin (g/rect-center source-rect)
                           :scale scale

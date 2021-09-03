@@ -46,7 +46,7 @@
                                           (g/vect+ (g/vect* step i)) 
                                           (g/vect+ (g/vect offset 0)))
                             :source-rectangle source-rect
-                            :color Color/White
+                            :color :white
                             :rotation 0
                             :origin (g/rect-center source-rect)
                             :scale scale
