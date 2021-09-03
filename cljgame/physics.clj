@@ -4,7 +4,8 @@
 
 (load-monogame)
 
-(import [tainicom.Aether.Physics2D.Dynamics World BodyType Body]
+(import [tainicom.Aether.Physics2D.Dynamics World BodyType Body Fixture]
+        [tainicom.Aether.Physics2D.Dynamics.Contacts Contact]
         [Microsoft.Xna.Framework Color Vector2 Rectangle])
 
 (def pixels-per-meter 100)
@@ -58,3 +59,13 @@
 
 (defn set-rotation! [^Body body rotation] 
   (set! (.Rotation body) rotation))
+
+
+(defn on-collide! [^Body body f] 
+  (let [handler (gen-delegate 
+                  |tainicom.Aether.Physics2D.Dynamics.OnCollisionEventHandler| 
+                  [sender other contact] (let [res (f sender other contact)] 
+                                           (if (nil? res) true res)))
+        event (.GetEvent |Body| "OnCollision")]
+  (.AddEventHandler event body handler)))
+

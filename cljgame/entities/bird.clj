@@ -7,11 +7,21 @@
 (def jump-force (g/vect 0 -8))
 (def animation-duration 0.25)
 
+(defn on-hit [hit-sound sender other contact]
+  (g/play hit-sound))
+
 (defn init [game world]
   (let [texture (g/load-texture-2d game "birdspritesheet")
         position (g/vect 150 50)
         sprite-width (-> texture .Width (/ 2))
-        sprite-height (.Height texture)]
+        sprite-height (.Height texture)
+        hit-sound (-> game (g/load-sound-effect "sfxhit") (g/sound-effect-instance))
+        body (physics/create-body world :dynamic
+                                (g/rect position
+                                        (* sprite-width scale)
+                                        (* sprite-height scale))
+                                :bird)]
+    (physics/on-collide! body (partial on-hit hit-sound))
     {:texture texture
      :sprite-index :normal
      :animation-frame-time 0
@@ -19,11 +29,7 @@
      :sound/wing (-> game (g/load-sound-effect "sfxwing") (g/sound-effect-instance))
      :sprite-source {:normal (g/rect 0 0 sprite-width sprite-height)
                      :flip (g/rect sprite-width 0 sprite-width sprite-height)}
-     :body (physics/create-body world :dynamic
-                                (g/rect position
-                                        (* sprite-width scale)
-                                        (* sprite-height scale))
-                                :bird)}))
+     :body body}))
 
 
 (defn handle-jump [{:keys [offset width position body holding]
