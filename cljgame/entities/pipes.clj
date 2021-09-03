@@ -3,7 +3,7 @@
             [cljgame.physics :as physics])
   (:import [System Math]))
 
-(def speed 90)
+(def speed 100)
 (def gap 280)
 (def frequency 4)
 (def scale 2)
@@ -69,7 +69,6 @@
 
 (defn update- [{{floor-height :height} :floor :as state} 
                state-key window world delta-time]
-  (println floor-height)
   (update state state-key update-pipes window world delta-time floor-height))
 
 (defn draw [sprite-batch {:keys [texture pipes]}]

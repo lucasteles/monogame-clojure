@@ -9,8 +9,8 @@
 
 (def pixels-per-meter 100)
 
-(defn create-world []
-  (new World (new Vector2 0 10)))
+(defn create-world [& [gravity]]
+  (new World (or gravity (new Vector2 0 10))))
 
 (defn step [world delta-time]
   (.Step world delta-time))
@@ -48,7 +48,7 @@
     body))
 
 (defn destroy-body! [world body] (.Remove world body))
-
+(defn apply-impulse! [^Body body ^Vector2 force] (.ApplyLinearImpulse body force))
 (defn velocity [^Body body] (-> body .LinearVelocity vect-meters->pixels))
 (defn position [^Body body] (-> body .Position vect-meters->pixels))
 (defn rotation [^Body body] (-> body .Rotation))

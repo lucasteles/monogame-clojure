@@ -1,38 +1,66 @@
 (ns cljgame.entities.bird
-  (:require [cljgame.monogame :as g]
-            [cljgame.physics :as physics])
+  (:require [cljgame.physics :as physics]
+            [cljgame.monogame :as g])
   (:import [System Math]))
 
 (def scale 0.8)
+(def jump-force (g/vect 0 -8))
+(def animation-duration 0.25)
 
-(defn init [game window world]
+(defn init [game world]
   (let [texture (g/load-texture-2d game "birdspritesheet")
-        position (g/vect 100 100)
+        position (g/vect 150 50)
         sprite-width (-> texture .Width (/ 2))
         sprite-height (.Height texture)]
     {:texture texture
-     :sprite-index 0
+     :sprite-index :normal
      :animation-frame-time 0
-     :sprite-source [(g/rect 0 0 sprite-width sprite-height)
-                     (g/rect sprite-width 0 (.Width texture) sprite-height)]
-     :body (physics/create-body world :dynamic 
-                                (g/rect position 
-                                        (* sprite-width scale) 
+     :rotation 0
+     :sprite-source {:normal (g/rect 0 0 sprite-width sprite-height)
+                     :flip (g/rect sprite-width 0 sprite-width sprite-height)}
+     :body (physics/create-body world :dynamic
+                                (g/rect position
+                                        (* sprite-width scale)
                                         (* sprite-height scale))
                                 :bird)}))
 
 
-(defn update- [{:keys [offset width position] :as state} delta-time]
-  state)
+(defn handle-jump [{:keys [offset width position body holding] :as state} delta-time]
+  (let [keyboard (g/keyboard-state)
+        pressed (g/is-key-dowm keyboard :space)
+        released (g/is-key-up keyboard :space)]
+    (cond
+      (and (not holding) pressed)
+      (do
+          (physics/set-linear-velocity! body g/vect-0)
+          (physics/apply-impulse! body jump-force)
+          (assoc state 
+                 :holding true
+                 :sprite-index :flip
+                 :animation-frame-time 0))
+      (and holding released )
+      (assoc state :holding false)
+      :else
+      state)))
+
+(defn handle-animation [{:keys [sprite-index animation-frame-time] :as state} delta-time]
+  (if (and (= :flip sprite-index) (>= animation-frame-time animation-duration))
+    (assoc state :animation-frame-time 0 :sprite-index :normal)
+    (assoc state :animation-frame-time (+ delta-time animation-frame-time))))
+
+(defn update- [state delta-time]
+  (-> state 
+      (handle-jump delta-time)
+      (handle-animation delta-time)))
 
 (defn draw [sprite-batch state ]
   (let [{texture :texture
          sprite-index :sprite-index
          sprite-source :sprite-source
+         rotation :rotation
          body :body} state
         position (physics/position body)
-        rotation (physics/rotation body)
-        source-rect (get sprite-source sprite-index )]
+        source-rect (sprite-index sprite-source)]
     (g/draw sprite-batch {:texture texture
                           :position position
                           :source-rectangle source-rect

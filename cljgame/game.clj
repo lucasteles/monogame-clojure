@@ -20,12 +20,12 @@
     (g/exit game)))
 
 (defn initialize [game { graphics :graphics-manager window :window }]
-  (let [world (physics/create-world)]
+  (let [world (physics/create-world (g/vect 0 20))]
     (game-configuration! game graphics)
     {:world world
      :floor (floor/init game window world)
      :background (background/init game window)
-     :bird (bird/init game window world)
+     :bird (bird/init game world)
      :pipe-manager (pipes/init game)}))
 
 (defn update- [{:keys [delta-time state game window]
@@ -35,6 +35,7 @@
   (-> state
       (update :background background/update- delta-time)
       (update :floor floor/update- delta-time)
+      (update :bird bird/update- delta-time)
       (pipes/update- :pipe-manager window world delta-time)))
 
 (defn draw [{:keys [sprite-batch graphics-device window]

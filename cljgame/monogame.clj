@@ -193,6 +193,7 @@
 
 (defn keyboard-state [] (Keyboard/GetState))
 (defn is-key-dowm [keyboard-state key-] (.IsKeyDown keyboard-state (key- keys-map)))
+(defn is-key-up [keyboard-state key-] (.IsKeyUp keyboard-state (key- keys-map)))
 
 (defn pixel-texture [game color]
   (let [graphics (graphics-device game)
