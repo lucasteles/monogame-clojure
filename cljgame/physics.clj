@@ -4,7 +4,7 @@
 
 (load-monogame)
 
-(import [tainicom.Aether.Physics2D.Dynamics World BodyType]
+(import [tainicom.Aether.Physics2D.Dynamics World BodyType Body]
         [Microsoft.Xna.Framework Color Vector2 Rectangle])
 
 (def pixels-per-meter 100)
@@ -47,8 +47,14 @@
     (-> body (.SetFriction 0)) 
     body))
 
-(defn velocity [body] (-> body .LinearVelocity vect-meters->pixels))
-(defn position [body] (-> body .Position vect-meters->pixels))
-(defn rotation [body] (-> body .Rotation))
+(defn destroy-body! [world body] (.Remove world body))
 
+(defn velocity [^Body body] (-> body .LinearVelocity vect-meters->pixels))
+(defn position [^Body body] (-> body .Position vect-meters->pixels))
+(defn rotation [^Body body] (-> body .Rotation))
 
+(defn set-linear-velocity! [^Body body ^Vector2 velocity] 
+  (set! (.LinearVelocity body) (vect-pixels->meters velocity)))
+
+(defn set-rotation! [^Body body rotation] 
+  (set! (.Rotation body) rotation))

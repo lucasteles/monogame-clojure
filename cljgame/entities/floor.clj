@@ -16,7 +16,7 @@
         position (g/vect 0 (- (g/height window) (/ height 2)))]
     {:texture texture
      :position position
-     :heigt height
+     :height height
      :width width
      :tile-number (inc (-> window g/width (/ width) double Math/Ceiling))
      :body (physics/create-body world :static 
@@ -35,7 +35,7 @@
          position :position
          tile-number :tile-number
          offset :offset
-         height :heigt 
+         height :height 
          width :width } state
         step (g/vect width 0) 
         source-rect (.Bounds texture)]

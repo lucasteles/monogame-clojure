@@ -1,9 +1,7 @@
 (ns cljgame.entities.bird
   (:require [cljgame.monogame :as g]
             [cljgame.physics :as physics])
-  (:import [System Math]
-           [Microsoft.Xna.Framework Color Vector2]
-           [Microsoft.Xna.Framework.Graphics SpriteEffects]))
+  (:import [System Math]))
 
 (def scale 0.8)
 
@@ -42,5 +40,5 @@
                           :rotation rotation
                           :origin (g/rect-center source-rect)
                           :scale scale
-                          :effects SpriteEffects/None
+                          :effects :none
                           :layer-depth 0})))

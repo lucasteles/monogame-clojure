@@ -26,24 +26,24 @@
      :floor (floor/init game window world)
      :background (background/init game window)
      :bird (bird/init game window world)
-     :pipes (pipes/init game)}))
+     :pipe-manager (pipes/init game)}))
 
-(defn update- [{:keys [delta-time state game window] 
-                {world :world} :state}]
+(defn update- [{:keys [delta-time state game window]
+                {world :world } :state}]
   (exit-on-esc game)
   (physics/step world delta-time)
   (-> state
       (update :background background/update- delta-time)
       (update :floor floor/update- delta-time)
-      (update :pipes pipes/update- delta-time window)))
+      (pipes/update- :pipe-manager window world delta-time)))
 
 (defn draw [{:keys [sprite-batch graphics-device window]
-            {:keys [floor background pipes bird] } :state}]
+             {:keys [floor background pipe-manager bird] } :state}]
   (g/clear graphics-device :light-gray)
   (g/begin sprite-batch)
 
   (background/draw sprite-batch background)
-  (pipes/draw sprite-batch pipes)
+  (pipes/draw sprite-batch pipe-manager)
   (floor/draw sprite-batch floor)
   (bird/draw sprite-batch bird)
 

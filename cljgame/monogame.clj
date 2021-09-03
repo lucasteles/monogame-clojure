@@ -123,6 +123,8 @@
 (defn height [^GameWindow window] (-> window .ClientBounds .Height))
 (defn window-size [^GameWindow window] (let [bounds (.ClientBounds window)] (vect (.Width bounds) (.Height bounds))))
 (defn tap [v] (println v) v)
+(defn random [a b] (+ a (rand (- b a))))
+(defn random-int [a b] (int (+ a (rand (inc (- b a))))))
 
 (def keys-map
   {:none Keys/None :back Keys/Back :tab Keys/Tab :enter Keys/Enter :pause Keys/Pause :caps-lock Keys/CapsLock
