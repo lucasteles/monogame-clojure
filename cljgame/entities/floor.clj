@@ -1,21 +1,27 @@
 (ns cljgame.entities.floor
-  (:require [cljgame.monogame :as g])
+  (:require [cljgame.monogame :as g]
+            [cljgame.physics :as physics]
+            [cljgame.entities.pipes :as pipes])
   (:import [System Math]
            [Microsoft.Xna.Framework Color Vector2]
            [Microsoft.Xna.Framework.Graphics SpriteEffects]))
 
 (def scale 2.5)
-(def speed -50)
+(def speed (- pipes/speed))
 
-(defn init [game window]
+(defn init [game window world]
   (let [texture (g/load-texture-2d game "floor")
-        texture-height (-> texture .Bounds .Height (* scale))
-        texture-width (-> texture .Bounds .Width (* scale))]
+        height (-> texture .Height (* scale))
+        width (-> texture .Width (* scale))
+        position (g/vect 0 (- (g/height window) (/ height 2)))]
     {:texture texture
-     :position (g/vect 0 (- (g/height window) texture-height))
-     :heigt texture-height
-     :width texture-width
-     :tile-number (inc (-> window g/width (/ texture-width) double Math/Ceiling))
+     :position position
+     :heigt height
+     :width width
+     :tile-number (inc (-> window g/width (/ width) double Math/Ceiling))
+     :body (physics/create-body world :static 
+                                (g/rect position (g/height window) height)
+                                :floor)
      :offset 0}))
 
 
@@ -25,23 +31,24 @@
                      (+ offset (* speed delta-time)))))
 
 (defn draw [sprite-batch state ]
-  (let [{logo :texture
+  (let [{texture :texture
          position :position
          tile-number :tile-number
          offset :offset
          height :heigt 
          width :width } state
-        step (g/vect width 0) ]
+        step (g/vect width 0) 
+        source-rect (.Bounds texture)]
     
     (dotimes [i tile-number]
-      (g/draw sprite-batch {:texture logo
+      (g/draw sprite-batch {:texture texture
                             :position (-> position 
                                           (g/vect+ (g/vect* step i)) 
                                           (g/vect+ (g/vect offset 0)))
-                            :source-rectangle (.Bounds logo)
+                            :source-rectangle source-rect
                             :color Color/White
                             :rotation 0
-                            :origin Vector2/Zero
+                            :origin (g/rect-center source-rect)
                             :scale scale
                             :effects SpriteEffects/None
                             :layer-depth 0}))))

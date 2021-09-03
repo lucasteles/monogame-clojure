@@ -1,11 +1,10 @@
 (ns cljgame.entities.pipes
-  (:require [cljgame.monogame :as g]
-            [cljgame.monogame :as g])
+  (:require [cljgame.monogame :as g])
   (:import [System Math]
            [Microsoft.Xna.Framework Color Vector2]
            [Microsoft.Xna.Framework.Graphics SpriteEffects]))
 
-(def speed 80)
+(def speed 90)
 (def gap 200)
 (def frequency 5)
 (def scale 2)
@@ -46,7 +45,6 @@
 (defn draw [sprite-batch {:keys [texture pipes]}]
   (doseq [pipe pipes]
     (let [{:keys [position]} pipe]
-      (println position)
       (g/draw sprite-batch {:texture texture
                             :position position
                             :source-rectangle (.Bounds texture)
