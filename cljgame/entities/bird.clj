@@ -36,6 +36,7 @@
           (assoc state 
                  :holding true
                  :sprite-index :flip
+                 :rotation 0
                  :animation-frame-time 0))
       (and holding released )
       (assoc state :holding false)
@@ -47,29 +48,28 @@
     (assoc state :animation-frame-time 0 :sprite-index :normal)
     (assoc state :animation-frame-time (+ delta-time animation-frame-time))))
 
-(defn hanfle-rotation [{ body :body 
+(defn handle-rotation [{ body :body 
                          rotation :rotation :as state}]
   (let [velocity-y (-> body physics/velocity .Y)]
     (cond 
-      (> velocity-y 0)
-      (let [new-rotation (- rotation 0.035)
-            max-rot 5.76]
-        (assoc state :rotation (if (and (< new-rotation max-rot) 
-                                        (> new-rotation 0.52))
-                                    max-rot new-rotation)))
-
       (< velocity-y 0)
-      (let [new-rotation (+ rotation 0.035)
-            max-rot 0.52]
-        (assoc state :rotation (if (> new-rotation max-rot) 
-                                    max-rot new-rotation)))
+      (let [new-rotation (- rotation 0.03)
+            max-rot -0.52]
+        (assoc state :rotation 
+               (if (< new-rotation max-rot) 
+                     max-rot new-rotation)))
+       (> velocity-y 0) 
+       (let [new-rotation (+ rotation 0.03)
+             max-rot 5.76]
+         (assoc state :rotation (if (> new-rotation max-rot) 
+                                     max-rot new-rotation)))
       :else state)))
 
 (defn update- [state delta-time]
   (-> state 
       (handle-jump delta-time)
       (handle-animation delta-time)
-      (hanfle-rotation)))
+      (handle-rotation)))
 
 (defn draw [sprite-batch state ]
   (let [{texture :texture
