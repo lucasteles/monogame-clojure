@@ -2,8 +2,7 @@
   (:require [cljgame.monogame :as g]))
 
 
-(import [Microsoft.Xna.Framework Color ]
-        [Microsoft.Xna.Framework.Graphics SpriteEffects])
+(import [Microsoft.Xna.Framework Color])
 
 (defn init [window]
   {:rotation 0
@@ -35,5 +34,5 @@
                           :rotation rotation
                           :origin logo-center
                           :scale 0.5
-                          :effects SpriteEffects/None
+                          :effects :none
                           :layer-depth 0}))) 

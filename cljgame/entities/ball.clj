@@ -55,5 +55,5 @@
 (defn draw [sprite-batch {:keys [texture size position]} ]
   (g/draw sprite-batch {:texture texture
                         :destination-rectangle (g/rect position size)
-                        :color Color/White}))
+                        :color :white}))
 

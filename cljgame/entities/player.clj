@@ -1,9 +1,6 @@
 (ns cljgame.entities.player
   (:require [cljgame.monogame :as g]))
 
-(import [Microsoft.Xna.Framework Color Vector2]
-        [Microsoft.Xna.Framework.Input Keyboard Keys])
-
 (defn define-player-Position [window index size]
   (let [width (g/width window)
         height (g/height window)
@@ -19,25 +16,25 @@
 (defn init [window index game]
   (let [size (g/vect 40 200)]
     {:size size
-     :texture (g/pixel-texture game Color/SaddleBrown)
+     :texture (g/pixel-texture game :saddle-brown)
      :index index
      :position (define-player-Position window index size) }))
 
 (defn read-velocity [player-index]
-  (let [keyboard (Keyboard/GetState)
-        pressed (fn [k] (.IsKeyDown keyboard k))
+  (let [keyboard (g/keyboard-state)
+        pressed (fn [k] (g/is-key-dowm keyboard k))
         velocity (g/vect 0 600)]
     (cond
-      (or (and (= player-index :player1) (pressed Keys/W))
-          (and (= player-index :player2) (pressed Keys/Up)))
+      (or (and (= player-index :player1) (pressed :w))
+          (and (= player-index :player2) (pressed :up)))
       (g/vect- velocity)
 
 
-      (or (and (= player-index :player1) (pressed Keys/S))
-          (and (= player-index :player2) (pressed Keys/Down)))
+      (or (and (= player-index :player1) (pressed :s))
+          (and (= player-index :player2) (pressed :down)))
       velocity
 
-      :else Vector2/Zero)))
+      :else g/vect-0)))
 
 (defn clamp-position [position window size]
   (let [{:keys [x y]} (g/vect-map position)
@@ -62,5 +59,5 @@
 (defn draw [sprite-batch {:keys [texture size position]} ]
   (g/draw sprite-batch {:texture texture
                         :destination-rectangle (g/rect position size)
-                        :color Color/White}))
+                        :color :white}))
 
