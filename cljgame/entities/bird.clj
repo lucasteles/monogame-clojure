@@ -31,8 +31,7 @@
         released (g/is-key-up keyboard :space)]
     (cond
       (and (not holding) pressed)
-      (do
-          (physics/set-linear-velocity! body g/vect-0)
+      (do (physics/set-linear-velocity! body g/vect-0)
           (physics/apply-impulse! body jump-force)
           (assoc state 
                  :holding true
@@ -48,10 +47,29 @@
     (assoc state :animation-frame-time 0 :sprite-index :normal)
     (assoc state :animation-frame-time (+ delta-time animation-frame-time))))
 
+(defn hanfle-rotation [{ body :body 
+                         rotation :rotation :as state}]
+  (let [velocity-y (-> body physics/velocity .Y)]
+    (cond 
+      (> velocity-y 0)
+      (let [new-rotation (- rotation 0.035)
+            max-rot 5.76]
+        (assoc state :rotation (if (and (< new-rotation max-rot) 
+                                        (> new-rotation 0.52))
+                                    max-rot new-rotation)))
+
+      (< velocity-y 0)
+      (let [new-rotation (+ rotation 0.035)
+            max-rot 0.52]
+        (assoc state :rotation (if (> new-rotation max-rot) 
+                                    max-rot new-rotation)))
+      :else state)))
+
 (defn update- [state delta-time]
   (-> state 
       (handle-jump delta-time)
-      (handle-animation delta-time)))
+      (handle-animation delta-time)
+      (hanfle-rotation)))
 
 (defn draw [sprite-batch state ]
   (let [{texture :texture
