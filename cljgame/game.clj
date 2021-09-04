@@ -5,6 +5,7 @@
             [cljgame.entities.floor :as floor]
             [cljgame.entities.pipes :as pipes]
             [cljgame.entities.bird :as bird]
+            [cljgame.entities.score :as score]
             [cljgame.entities.background :as background])
   (:import [System Console])
   (:gen-class))
@@ -22,11 +23,13 @@
 (defn initialize [game { graphics :graphics-manager window :window }]
   (let [world (physics/create-world (g/vect 0 20))]
     (game-configuration! game graphics)
+
     {:world world
      :floor (floor/init game window world)
      :background (background/init game window)
      :bird (bird/init game world)
-     :pipe-manager (pipes/init game)}))
+     :pipe-manager (pipes/init game)
+     :score (score/init game window)}))
 
 (defn update- [{:keys [delta-time state game window]
                 {world :world } :state}]
@@ -39,7 +42,7 @@
       (pipes/update- :pipe-manager window world delta-time)))
 
 (defn draw [{:keys [sprite-batch graphics-device window]
-             {:keys [floor background pipe-manager bird] } :state}]
+             {:keys [floor background pipe-manager bird score] } :state}]
   (g/clear graphics-device :light-gray)
   (g/begin sprite-batch)
 
@@ -47,7 +50,7 @@
   (pipes/draw sprite-batch pipe-manager)
   (floor/draw sprite-batch floor)
   (bird/draw sprite-batch bird)
-
+  (score/draw sprite-batch score)
   (g/end sprite-batch))
 
 (defn -main [& args]

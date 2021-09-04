@@ -2,43 +2,28 @@
   (:require [cljgame.monogame :as g])
   (:import [System Math]))
 
-(def scale 4.5)
-(def speed -15)
+(def ^:private font-size 75)
+(def ^:private top-offset 64)
 
 (defn init [game window]
-  (let [texture (g/load-texture-2d game "background")
-        texture-height (-> texture .Bounds .Height (* scale))
-        texture-width (-> texture .Bounds .Width (* scale))]
-    {:texture texture
-     :position (g/vect 0 0)
-     :heigt texture-height
-     :width texture-width
-     :tile-number (inc (-> window g/width (/ texture-width) double Math/Ceiling))
-     :offset 0}))
+  {:score 0
+   :font (g/load-sprite-font game "scorefont")
+   :position (g/vect (-> window g/width (/ 2) (- (/ font-size 2)))
+                     top-offset) })
 
-(defn update- [{:keys [offset width position] :as state} delta-time]
-  (assoc state
-         :offset (if (>= (Math/Abs offset) width) 0
-                     (+ offset (* speed delta-time)))))
+(defn draw [sprite-batch {font :font position :position score :score}]
+  (g/draw-text
+    sprite-batch
+    {:sprite-font font
+     :text score
+     :position (g/vect+ position (g/vect 6 -6))
+     :color :black})
 
-(defn draw [sprite-batch state ]
-  (let [{logo :texture
-         position :position
-         tile-number :tile-number
-         offset :offset
-         height :heigt 
-         width :width } state
-        step (g/vect width 0) ]
-    
-    (dotimes [i tile-number]
-      (g/draw sprite-batch {:texture logo
-                            :position (-> position 
-                                          (g/vect+ (g/vect* step i)) 
-                                          (g/vect+ (g/vect offset 0)))
-                            :source-rectangle (.Bounds logo)
-                            :color :white
-                            :rotation 0
-                            :origin Vector2/Zero
-                            :scale scale
-                            :effects SpriteEffects/None
-                            :layer-depth 1}))))
+  (g/draw-text
+    sprite-batch
+    {:sprite-font font
+     :text score
+     :position position
+     :color :white})
+  
+  )

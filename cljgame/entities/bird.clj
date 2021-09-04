@@ -4,15 +4,16 @@
   (:import [System Math]))
 
 (def scale 0.8)
-(def jump-force (g/vect 0 -8))
+(def jump-force (g/vect 0 -7))
 (def animation-duration 0.25)
+(def start-position (g/vect 300 50))
 
 (defn on-hit [hit-sound sender other contact]
   (g/play hit-sound))
 
 (defn init [game world]
   (let [texture (g/load-texture-2d game "birdspritesheet")
-        position (g/vect 200 50)
+        position start-position
         sprite-width (-> texture .Width (/ 2))
         sprite-height (.Height texture)
         hit-sound (-> game (g/load-sound-effect "sfxhit") (g/sound-effect-instance))
