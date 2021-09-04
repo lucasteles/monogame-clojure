@@ -71,14 +71,14 @@
 (defn check-point [{:keys [bird score]
                     {:keys [pipes score-sound]} :pipe-manager
                     :as state}]
-  (let [pipe (->> pipes (filter (partial not-counted-pipe? bird)) first)
-        new-pipes (->> pipes (map #(if (= % pipe)
-                                     (assoc % :counted true) %)))]
+  (let [pipe (->> pipes (filter (partial not-counted-pipe? bird)) first)]
     (if pipe
       (do (g/play score-sound)
           (-> state
-              (assoc-in [:pipe-manager :pipes] new-pipes)
-              (assoc-in [:score :score] (-> score :score inc))))
+              (assoc-in [:pipe-manager :pipes] (map #(if (= % pipe) 
+                                                       (assoc % :counted true) 
+                                                       %) pipes))
+              (update-in [:score :score] inc)))
       state)))
 
 (defn update-pipes [{:keys [offset width position] :as state} window world delta-time]
