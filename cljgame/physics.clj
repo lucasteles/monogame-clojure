@@ -80,12 +80,14 @@
 (defn set-rotation! [^Body body rotation] 
   (set! (.Rotation body) rotation))
 
+(defn set-position! [^Body body position] 
+  (set! (.Position body) (vect-pixels->meters position)))
 
 (defn on-collide! [^Body body f] 
   (let [handler (gen-delegate 
                   |tainicom.Aether.Physics2D.Dynamics.OnCollisionEventHandler| 
                   [sender other contact] (let [res (f sender other contact)] 
-                                           (if (nil? res) true res)))
+                                           (if (nil? res) true (boolean res))))
         event (.GetEvent |Body| "OnCollision")]
   (.AddEventHandler event body handler)))
 

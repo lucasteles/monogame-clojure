@@ -17,7 +17,7 @@
 (def exe-content-path (Path/Combine current-exe-dir "Content"))
 
 (defn run [load-fn initialize-fn update-fn draw-fn]
-  (let [props (atom {:state {}})
+  (let [props (atom {:state {} :forced false})
         game-instance (proxy
                         ;; first vector contains superclass and interfaces that the created class should extend/implement
                         ;; second vector contains arguments to superclass constructor
@@ -45,7 +45,9 @@
                                                       :window window
                                                       :graphics-manager graphics-manager})]
                             (when (not (identical? state new-state))
-                              (swap! props assoc :state new-state))
+                              (if (:forced @props)
+                                (swap! props assoc :forced false)
+                                (swap! props assoc :state new-state)))
                             (proxy-super Update game-time)))
 
                         (Draw [game-time]
@@ -59,8 +61,12 @@
                                       :window (:window props')})
                             (proxy-super Draw game-time))))]
 
-    (swap! props assoc :graphics-manager (new GraphicsDeviceManager game-instance))
-    (swap! props assoc :window (get-prop game-instance "Window" ))
+    (swap! props assoc :graphics-manager (new GraphicsDeviceManager game-instance)
+                       :window (get-prop game-instance "Window")
+                       :update-state! (fn [state-fn] 
+                                        (swap! props assoc :forced true)
+                                        (swap! props update :state state-fn)))
+
     (set! (->> game-instance .Content .RootDirectory )
           (if (Directory/Exists exe-content-path) exe-content-path debug-content-path))
     (.Run game-instance)))

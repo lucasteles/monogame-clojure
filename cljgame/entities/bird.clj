@@ -8,10 +8,13 @@
 (def animation-duration 0.25)
 (def start-position (g/vect 300 350))
 
-(defn on-hit [hit-sound sender other contact]
-  (g/play hit-sound))
+(defn on-hit-event [hit-sound update-state! sender other contact]
+  (g/play hit-sound)
+  (update-state!
+    (fn [current-state] 
+      (assoc-in current-state [:game-over :is-game-over] true))))
 
-(defn init [game world]
+(defn init [game world update-state!]
   (let [texture (g/load-texture-2d game "birdspritesheet")
         position start-position
         sprite-width (-> texture .Width (/ 2))
@@ -21,7 +24,7 @@
                world :dynamic
                (-> sprite-width (* scale) (/ 2) (* 0.6))
                position)]
-    (physics/on-collide! body (partial on-hit hit-sound))
+    (physics/on-collide! body (partial on-hit-event hit-sound update-state!))
     {:texture texture
      :sprite-index :normal
      :animation-frame-time 0
@@ -33,23 +36,24 @@
 
 
 (defn handle-jump [{:keys [offset width position body holding]
-                    sfx-wing :sound/wing :as state} delta-time keyboard-state]
-  (let [pressed (g/is-key-dowm keyboard-state :space)
-        released (g/is-key-up keyboard-state :space)]
-    (cond
-      (and (not holding) pressed)
-      (do (physics/set-linear-velocity! body g/vect-0)
-          (physics/apply-impulse! body jump-force)
-          (g/play sfx-wing)
-          (assoc state
-                 :holding true
-                 :sprite-index :flip
-                 :rotation 0
-                 :animation-frame-time 0))
-      (and holding released )
-      (assoc state :holding false)
-      :else
-      state)))
+                    sfx-wing :sound/wing :as state} delta-time keyboard-state is-game-over]
+  (if is-game-over state
+    (let [pressed (g/is-key-dowm keyboard-state :space)
+          released (g/is-key-up keyboard-state :space)]
+      (cond
+        (and (not holding) pressed)
+        (do (physics/set-linear-velocity! body g/vect-0)
+            (physics/apply-impulse! body jump-force)
+            (g/play sfx-wing)
+            (assoc state
+                   :holding true
+                   :sprite-index :flip
+                   :rotation 0
+                   :animation-frame-time 0))
+        (and holding released )
+        (assoc state :holding false)
+        :else
+        state))))
 
 (defn handle-animation [{:keys [sprite-index animation-frame-time] :as state} delta-time]
   (if (and (= :flip sprite-index) (>= animation-frame-time animation-duration))
@@ -73,9 +77,9 @@
                                  max-rot new-rotation)))
       :else state)))
 
-(defn update- [state keyboard-state delta-time]
+(defn update- [state keyboard-state is-game-over delta-time]
   (-> state
-      (handle-jump delta-time keyboard-state)
+      (handle-jump delta-time keyboard-state is-game-over)
       (handle-animation delta-time)
       (handle-rotation)))
 
