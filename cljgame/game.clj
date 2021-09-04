@@ -39,7 +39,7 @@
       (update :background background/update- delta-time)
       (update :floor floor/update- delta-time)
       (update :bird bird/update- delta-time)
-      (pipes/update- :pipe-manager window world delta-time)))
+      (pipes/update- window world delta-time)))
 
 (defn draw [{:keys [sprite-batch graphics-device window]
              {:keys [floor background pipe-manager bird score] } :state}]
