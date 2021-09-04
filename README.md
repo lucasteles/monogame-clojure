@@ -1,7 +1,7 @@
 # clojure-clr-monogame-test
 [Under testing]
 
-## Pong Clone
+## Flappy Bird Clone
 
 ![](pong-480.gif)
 
