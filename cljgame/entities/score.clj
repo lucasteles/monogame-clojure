@@ -1,5 +1,6 @@
-(ns cljgame.entities.background
-  (:require [cljgame.monogame :as g]))
+(ns cljgame.entities.score
+  (:require [cljgame.monogame :as g])
+  (:import [System Math]))
 
 (def scale 4.5)
 (def speed -15)
@@ -37,7 +38,7 @@
                             :source-rectangle (.Bounds logo)
                             :color :white
                             :rotation 0
-                            :origin g/vect-0
+                            :origin Vector2/Zero
                             :scale scale
-                            :effects :none
+                            :effects SpriteEffects/None
                             :layer-depth 1}))))
