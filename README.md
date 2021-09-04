@@ -1,7 +1,7 @@
 # clojure-clr-monogame-test
 [Under testing]
 
-## Pong Clone
+## Flappy Bird Clone
 
 ![](pong-480.gif)
 
@@ -9,12 +9,13 @@
 
 - `dotnet sdk 3.1`
 
-## Running on Dotnet
-Install and register the monogame tools:
+Install and register the monogame content builder:
 ```bash
-dotnet tool restore
-dotnet mgcb-editor --register
+dotnet tool install -g  mgcb-editor
+mgcb-editor --register
 ```
+
+## Running on Dotnet
 
 Compile and run:
 ```bash
