@@ -18,6 +18,7 @@
            (assoc-in [:pipe-manager :pipes] [])
            (assoc-in [:pipe-manager :last-spawn] 0)
            (assoc-in [:bird :rotation] 0)
+           (assoc-in [:score :score] 0)
            (assoc :game-over (init))
            (assoc :paused true)))
 
