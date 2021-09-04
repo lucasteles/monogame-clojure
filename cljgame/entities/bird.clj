@@ -6,7 +6,7 @@
 (def scale 0.8)
 (def jump-force (g/vect 0 -7))
 (def animation-duration 0.25)
-(def start-position (g/vect 300 50))
+(def start-position (g/vect 300 350))
 
 (defn on-hit [hit-sound sender other contact]
   (g/play hit-sound))
@@ -33,10 +33,9 @@
 
 
 (defn handle-jump [{:keys [offset width position body holding]
-                    sfx-wing :sound/wing :as state} delta-time]
-  (let [keyboard (g/keyboard-state)
-        pressed (g/is-key-dowm keyboard :space)
-        released (g/is-key-up keyboard :space)]
+                    sfx-wing :sound/wing :as state} delta-time keyboard-state]
+  (let [pressed (g/is-key-dowm keyboard-state :space)
+        released (g/is-key-up keyboard-state :space)]
     (cond
       (and (not holding) pressed)
       (do (physics/set-linear-velocity! body g/vect-0)
@@ -74,9 +73,9 @@
                                  max-rot new-rotation)))
       :else state)))
 
-(defn update- [state delta-time]
+(defn update- [state keyboard-state delta-time]
   (-> state
-      (handle-jump delta-time)
+      (handle-jump delta-time keyboard-state)
       (handle-animation delta-time)
       (handle-rotation)))
 
