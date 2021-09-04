@@ -1,6 +1,6 @@
 (ns cljgame.entities.bird
-  (:require [cljgame.physics :as physics]
-            [cljgame.monogame :as g])
+  (:require [cljgame.monogame :as g]
+            [cljgame.physics :as physics])
   (:import [System Math]))
 
 (def scale 0.8)
@@ -16,11 +16,10 @@
         sprite-width (-> texture .Width (/ 2))
         sprite-height (.Height texture)
         hit-sound (-> game (g/load-sound-effect "sfxhit") (g/sound-effect-instance))
-        body (physics/create-body world :dynamic
-                                (g/rect position
-                                        (* sprite-width scale)
-                                        (* sprite-height scale))
-                                :bird)]
+        body (physics/create-body-circle
+               world :dynamic
+               (-> sprite-width (* scale) (/ 2) (* 0.6))
+               position)]
     (physics/on-collide! body (partial on-hit hit-sound))
     {:texture texture
      :sprite-index :normal
@@ -42,7 +41,7 @@
       (do (physics/set-linear-velocity! body g/vect-0)
           (physics/apply-impulse! body jump-force)
           (g/play sfx-wing)
-          (assoc state 
+          (assoc state
                  :holding true
                  :sprite-index :flip
                  :rotation 0
@@ -57,25 +56,25 @@
     (assoc state :animation-frame-time 0 :sprite-index :normal)
     (assoc state :animation-frame-time (+ delta-time animation-frame-time))))
 
-(defn handle-rotation [{ body :body 
-                         rotation :rotation :as state}]
+(defn handle-rotation [{ body :body
+                        rotation :rotation :as state}]
   (let [velocity-y (-> body physics/velocity .Y)]
-    (cond 
+    (cond
       (< velocity-y 0)
       (let [new-rotation (- rotation 0.03)
             max-rot -0.52]
-        (assoc state :rotation 
-               (if (< new-rotation max-rot) 
-                     max-rot new-rotation)))
-       (> velocity-y 0) 
-       (let [new-rotation (+ rotation 0.03)
-             max-rot 5.76]
-         (assoc state :rotation (if (> new-rotation max-rot) 
-                                     max-rot new-rotation)))
+        (assoc state :rotation
+               (if (< new-rotation max-rot)
+                 max-rot new-rotation)))
+      (> velocity-y 0)
+      (let [new-rotation (+ rotation 0.03)
+            max-rot 5.76]
+        (assoc state :rotation (if (> new-rotation max-rot)
+                                 max-rot new-rotation)))
       :else state)))
 
 (defn update- [state delta-time]
-  (-> state 
+  (-> state
       (handle-jump delta-time)
       (handle-animation delta-time)
       (handle-rotation)))

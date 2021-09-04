@@ -21,7 +21,7 @@
      :height texture-height
      :width texture-width }))
 
-(defn create-pipe [position width texture-height window world]
+(defn create-pipe [width texture-height window world]
   (let [center (/ texture-height 2)
         random-top (-> (g/random-int 80 310))
         spawn-x (-> window g/width (+ texture-height) inc)
@@ -45,11 +45,11 @@
      :counted false}))
 
 (defn spawn-handler
-  [{:keys [position width height last-spawn] :as state} window world delta-time]
+  [{:keys [width height last-spawn] :as state} window world delta-time]
   (if (<= last-spawn frequency) 
     (assoc state :last-spawn (+ last-spawn delta-time))
     (-> state
-        (update :pipes conj (create-pipe position width height window world))
+        (update :pipes conj (create-pipe width height window world))
         (assoc :last-spawn 0))))
 
 (defn pipe-offscreen? [pipe]

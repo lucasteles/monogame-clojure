@@ -58,13 +58,12 @@
    ^Vector2 position
    &[tag rotation]]
   (let [internal-body-type (or (body-type body-type-map) (throw (Exception. "INVALID BODY TYPE")) )
-        x (pixels->meters (.X position))
-        y (pixels->meters (.Y position))
-        body (.CreateCircle world radios 
-                               1 ; density
-                               (Vector2. x y)
-                               (or rotation 0) ; rotation
-                               internal-body-type)]
+        position-converted (vect-pixels->meters position)
+        body (.CreateCircle world 
+                            (pixels->meters radios) 
+                            1 ; density
+                            position-converted
+                            internal-body-type)]
     (config-body! body tag)
     body))
 
