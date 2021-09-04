@@ -27,6 +27,12 @@
 (defn vect-pixels->meters [n] (Vector2/op_Division n pixels-per-meter))
 (defn vect-meters->pixels [n] (Vector2/op_Multiply n pixels-per-meter))
 
+(defn- config-body! [body tag]
+    (-> body .Mass (set! 1))
+    (-> body .Tag (set! tag))
+    (-> body (.SetRestitution 0))
+    (-> body (.SetFriction 0)))
+
 (defn create-body
   [^World world
    ^BodyType body-type
@@ -42,11 +48,26 @@
                                (Vector2. x y)
                                (or rotation 0) ; rotation
                                internal-body-type)]
-    (-> body .Mass (set! 1))
-    (-> body .Tag (set! tag))
-    (-> body (.SetRestitution 0))
-    (-> body (.SetFriction 0)) 
+    (config-body! body tag)
     body))
+
+(defn create-body-circle
+  [^World world
+   ^BodyType body-type
+   radios
+   ^Vector2 position
+   &[tag rotation]]
+  (let [internal-body-type (or (body-type body-type-map) (throw (Exception. "INVALID BODY TYPE")) )
+        x (pixels->meters (.X position))
+        y (pixels->meters (.Y position))
+        body (.CreateCircle world radios 
+                               1 ; density
+                               (Vector2. x y)
+                               (or rotation 0) ; rotation
+                               internal-body-type)]
+    (config-body! body tag)
+    body))
+
 
 (defn destroy-body! [world body] (.Remove world body))
 (defn apply-impulse! [^Body body ^Vector2 force] (.ApplyLinearImpulse body force))
