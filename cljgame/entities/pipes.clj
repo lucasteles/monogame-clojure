@@ -17,10 +17,11 @@
     {:texture texture
      :pipes []
      :last-spawn frequency
+     :score-sound (-> game (g/load-sound-effect "sfxpoint") g/sound-effect-instance)
      :height texture-height
      :width texture-width }))
 
-(defn create-pipe [position width texture-height floor-height window world]
+(defn create-pipe [position width texture-height window world]
   (let [center (/ texture-height 2)
         random-top (-> (g/random-int 80 310))
         spawn-x (-> window g/width (+ texture-height) inc)
@@ -40,14 +41,15 @@
     (physics/set-linear-velocity! body-up velocity)
     (physics/set-linear-velocity! body-down velocity)
     {:body-up body-up
-     :body-down body-down}))
+     :body-down body-down
+     :counted false}))
 
 (defn spawn-handler
-  [{:keys [position width height last-spawn] :as state} window world delta-time floor-height]
+  [{:keys [position width height last-spawn] :as state} window world delta-time]
   (if (<= last-spawn frequency) 
     (assoc state :last-spawn (+ last-spawn delta-time))
     (-> state
-        (update :pipes conj (create-pipe position width height floor-height window world))
+        (update :pipes conj (create-pipe position width height window world))
         (assoc :last-spawn 0))))
 
 (defn pipe-offscreen? [pipe]
@@ -62,14 +64,22 @@
         pipe))
     (filter some?)))
 
-(defn update-pipes [{:keys [offset width position] :as state} window world delta-time floor-height]
-  (-> state
-      (spawn-handler window world delta-time floor-height)
-      (update :pipes clear-pipes world)))
+(defn check-point [pipes sound player-pos]
+  (for [pipe pipes]
+    (if (and (false? (:counted pipe)) 
+             (-> pipe :body-up physics/position .X (< (.X player-pos))))
+      (do (g/play sound)
+          (assoc pipe :counted true))
+      pipe)))
 
-(defn update- [{{floor-height :height} :floor :as state} 
-               state-key window world delta-time]
-  (update state state-key update-pipes window world delta-time floor-height))
+(defn update-pipes [{:keys [offset width position score-sound] :as state} window world delta-time player]
+  (-> state
+      (spawn-handler window world delta-time)
+      (update :pipes clear-pipes world)
+      (update :pipes check-point score-sound (-> player :body physics/position))))
+
+(defn update- [{player :bird :as state} state-key window world delta-time]
+  (update state state-key update-pipes window world delta-time player))
 
 (defn draw [sprite-batch {:keys [texture pipes]}]
   (doseq [pipe pipes]

@@ -12,7 +12,7 @@
 
 (defn init [game world]
   (let [texture (g/load-texture-2d game "birdspritesheet")
-        position (g/vect 150 50)
+        position (g/vect 200 50)
         sprite-width (-> texture .Width (/ 2))
         sprite-height (.Height texture)
         hit-sound (-> game (g/load-sound-effect "sfxhit") (g/sound-effect-instance))
