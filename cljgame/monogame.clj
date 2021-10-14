@@ -13,7 +13,7 @@
         [Microsoft.Xna.Framework.Input Keyboard Keys])
 
 (def graphics-device (fn [game] (get-prop game "GraphicsDevice")))
-(def debug-content-path (Path/Combine (Directory/GetCurrentDirectory) "Content/bin/DesktopGL"))
+(def debug-content-path (Path/Combine (Directory/GetCurrentDirectory) "Content/bin/DesktopGL/Content"))
 (def exe-content-path (Path/Combine current-exe-dir "Content"))
 
 (defn run [load-fn initialize-fn update-fn draw-fn]

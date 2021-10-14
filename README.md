@@ -11,7 +11,7 @@
 
 Install and register the monogame content builder:
 ```bash
-dotnet tool install -g  mgcb-editor
+dotnet tool install -g  dotnet-mgcb-editor
 mgcb-editor --register
 ```
 
